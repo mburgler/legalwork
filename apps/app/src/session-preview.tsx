@@ -7,6 +7,7 @@ import type { ProjectFileLink } from "@legalwork/types/project-files";
 import type { ToolPart } from "@opencode-ai/sdk/v2/client";
 import { registerEmptySession } from "./react-app/domains/session/sidebar/session-list-visibility";
 import { projectViewFromPath, workspaceSessionRoute } from "./react-app/shell/workspace-routes";
+import { DEFAULT_ASSISTANT_PROFILE, type AssistantProfile } from "@legalwork/types/main-assistant";
 /** @jsxImportSource react */
 // Dev-only fixture: deliberately absent from the production Vite inputs.
 // Uses the real session, composer, navigation, files, and Memory Drive views.
@@ -66,6 +67,8 @@ const captionHeight = previewParams.has("tall-titlebar") ? 64 : 44;
 if (platform === "mac" || platform === "windows") document.documentElement.classList.add("legalwork-electron", `legalwork-platform-${platform}`);
 if (previewParams.has("lang")) setLocale(previewParams.get("lang") === "de" ? "de" : "en");
 if (previewParams.has("theme")) document.documentElement.dataset.theme = previewParams.get("theme") === "dark" ? "dark" : "light";
+const assistantPreview = previewParams.has("assistant");
+const assistantToday = "2026-10-07";
 // `?subscription=ended&role=member` previews expiry without connected services.
 const subscriptionPreview = previewParams.get("subscription") === "ended";
 const limitParam = previewParams.get("limit") ?? (subscriptionPreview ? "pro" : null);
@@ -162,6 +165,15 @@ saveSnapshot(snapshot(welcomeId, "New task"));
 // Open the same untouched chat in two preview windows to exercise list visibility.
 const emptyChatId = previewParams.has("empty-chat") ? `visual-empty-${previewParams.get("empty-chat")}` : null;
 if (emptyChatId) { registerEmptySession(emptyChatId); saveSnapshot(snapshot(emptyChatId, "New chat visibility check")); }
+if (assistantPreview) {
+  for (const date of ["2026-10-04", "2026-10-05", "2026-10-06"]) saveSnapshot(snapshot(`assistant-${date}`, date, `Review my open projects for ${date}.`));
+  const prior = snapshots.get("assistant-2026-10-06");
+  const last = prior?.messages.at(-1);
+  if (prior && last) {
+    last.parts.push({ id: "delegation-part", sessionID: prior.session.id, messageID: last.info.id, type: "tool", callID: "delegate-fixture", tool: "legalwork_assistant_delegate", state: { status: "completed", input: {}, time: { start: now, end: now }, title: "Review supplier terms", output: JSON.stringify({ ok: true, delegation: { workspaceId: otherWorkspace.id, sessionId: "delegated-review", title: "Review supplier terms", projectName: "Northstar Legal", scope: "Review liability and termination against our playbook. Save a draft for partner review.", status: "started" } }) } });
+    saveSnapshot(prior);
+  }
+}
 saveSnapshot(snapshot("visual-review", "Review supplier agreement", "Review the supplier agreement against our standard playbook and highlight the clauses that need attention."));
 saveSnapshot(snapshot("visual-board", "Prepare board meeting notes", "Help me organize the open legal topics for next week's board meeting."));
 saveSnapshot(snapshot("visual-policy", "Update the privacy policy", "Summarize the changes we need to make to the privacy policy."));
@@ -500,6 +512,10 @@ const fixtureClient: LegalworkServerClient = {
     }
     throw new Error("Billing changes and payments are disabled in this visual preview.");
   },
+  mainAssistantHistory: async (before = assistantToday, limit = 14) => {
+    const days = ["2026-10-06", "2026-10-05", "2026-10-04"].filter(date => date < before).map(date => ({ date, sessionId: `assistant-${date}` }));
+    return { days: days.slice(0, limit), nextBefore: days.length > limit ? days[limit - 1].date : null };
+  },
   getSessionSnapshot: async (_workspaceId, sessionId) => {
     const item = snapshots.get(sessionId);
     if (!item) throw new Error("Unknown preview session");
@@ -579,6 +595,7 @@ const fixtureClient: LegalworkServerClient = {
 };
 
 function SessionPreview() {
+  const [assistantProfile, setAssistantProfile] = useState<AssistantProfile>(DEFAULT_ASSISTANT_PROFILE);
   // Repaint on language change, the way AppRoot does in the real app.
   useLocale();
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(window.location.hash.includes("view=workspace") ? null : subagentApprovals ? "visual-review" : limitParam ? "visual-limit" : emptyChatId ?? welcomeId);
@@ -604,7 +621,7 @@ function SessionPreview() {
   const pendingHome = useRef<PendingHomeMessage>({ sessionId: null, uploads: new Map() });
   const failHome = useRef(previewParams.has("home-fail"));
   const groups: WorkspaceSessionGroup[] = [
-    { workspace, status: "ready", sessions: Array.from(snapshots.values()).map((item) => item.session).filter(session => session.directory !== otherWorkspace.path) },
+    { workspace, status: "ready", sessions: assistantPreview ? [] : Array.from(snapshots.values()).map((item) => item.session).filter(session => session.directory !== otherWorkspace.path) },
     { workspace: otherWorkspace, status: "ready", sessions: Array.from(snapshots.values()).map(item => item.session).filter(session => session.directory === otherWorkspace.path) },
   ];
   const newTask = (projectId = activeWorkspace.id) => {
@@ -697,6 +714,8 @@ function SessionPreview() {
             setRevision((value) => value + 1);
           }}
           sidebar={{
+            assistantProfile, onSaveAssistantProfile: async profile => setAssistantProfile(profile),
+            onOpenAssistant: assistantPreview ? () => setSelectedSessionId(welcomeId) : undefined, assistantActive: assistantPreview,
             workspaceSessionGroups: projectOrder.flatMap(id => groups.filter(group => group.workspace.id === id)), onReorderWorkspaces: setProjectOrder, selectedWorkspaceId: activeWorkspace.id, selectedSessionId, developerMode: false,
             sessionStatusById: {}, connectingWorkspaceId: null, workspaceConnectionStateById: {}, newChatDisabled: false,
             sidebarHydratedFromCache: true, startupPhase: "ready", onSelectWorkspace: id => {
@@ -711,6 +730,7 @@ function SessionPreview() {
             activeNav: showWorkflows ? "workflows" : null,
           }}
           surface={{
+            assistantDate: assistantPreview ? assistantToday : undefined,
             workspaceRoot: activeWorkspace.path, developerMode: false, modelLabel: model.providerID === "eigenwelt" ? "LegalWork AI" : "ChatGPT", onModelClick: previewNotice,
             onChooseAiPlan: async plan => {
               if (!subscriptionPreview) { previewNotice(); return; }

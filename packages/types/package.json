@@ -58,7 +58,8 @@
     "./wiki": "./src/wiki.ts",
     "./wiki-suggestions": "./src/wiki-suggestions.ts",
     "./views": "./src/views.ts",
-    "./line-diff": "./src/line-diff.ts"
+    "./line-diff": "./src/line-diff.ts",
+    "./main-assistant": "./src/main-assistant.ts"
   },
   "files": [
     "src",
