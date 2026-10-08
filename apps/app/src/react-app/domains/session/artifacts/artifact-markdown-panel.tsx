@@ -119,7 +119,10 @@ export function ArtifactMarkdownPanel({ sessionId, client, workspaceId, workspac
   const dirty = Boolean(draft && draft.content !== draft.baseline);
   useEffect(() => { if (dirty) usePanelTabStore.getState().keepTab(sessionId, target.id); }, [dirty, sessionId, target.id]);
   const onChange = useCallback((content: string) => {
-    if (!localReadOnly) update((current) => current ? { ...current, content } : current);
+    if (!localReadOnly) {
+      setSaveError(null);
+      update((current) => current ? { ...current, content } : current);
+    }
   }, [update, localReadOnly]);
 
   useEffect(() => registerUnsavedDocument(artifactDocumentKey(workspaceId, sessionId, target.id), target.name,
@@ -192,6 +195,14 @@ export function ArtifactMarkdownPanel({ sessionId, client, workspaceId, workspac
     isDirty: () => Boolean(draftRef.current && draftRef.current.content !== draftRef.current.baseline),
     save,
   });
+  const close = async () => {
+    if (autosave && draftRef.current?.content !== draftRef.current?.baseline) {
+      if (clash || !await save()) return;
+      // An edit made during the write must also be saved before closing.
+      if (draftRef.current?.content !== draftRef.current?.baseline) return;
+    }
+    onClose();
+  };
 
   /** Changed in the same place elsewhere: keep both (mine as a copy beside it), take theirs, or keep mine over it. */
   const resolveClash = async (choice: "both" | "theirs" | "mine") => {
@@ -310,7 +321,7 @@ export function ArtifactMarkdownPanel({ sessionId, client, workspaceId, workspac
             }
           })}><ExternalLink /></Button>
         </>}
-        <Button variant="ghost" size="icon-sm" aria-label={t("artifact.close")} title={t("artifact.close")} onClick={onClose} disabled={saving}><X /></Button>
+        <Button variant="ghost" size="icon-sm" aria-label={t("artifact.close")} title={t("artifact.close")} onClick={() => void close()} disabled={saving}><X /></Button>
       </>}
     >
       {!streamingPreview && <DocumentAccessBanner access={access} />}

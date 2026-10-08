@@ -1,3 +1,4 @@
+import { assistantWorkspace, requireMainAssistant } from "./assistant-workspace.js";
 import { PROJECT_TASK_AGENT, ALL_PROJECTS_TASK_AGENT } from "../scheduled-tasks/access.js";
 import { z } from "zod";
 import { ScheduledTaskInputSchema, TaskScheduleSchema } from "@legalwork/types/scheduled-tasks";
@@ -6,11 +7,11 @@ import type { createOpencodeClient } from "@opencode-ai/sdk";
 import { resolveWorkspaceId, serverToken, serverUrl, type OpenCodeContext } from "./office-plugin-shared.js";
 import { appStateReminders } from "./app-state-reminders.js";
 
-async function request(context: OpenCodeContext, method: string, path: string, data?: unknown) {
+async function request(context: OpenCodeContext, method: string, path: string, data?: unknown, projectId?: string) {
   const url = serverUrl(), token = serverToken();
   if (!url || !token) return JSON.stringify({ ok: false, error: "LegalWork server is not connected." });
   try {
-    const workspaceId = await resolveWorkspaceId(context, { requireDirectory: true });
+    const workspaceId = await assistantWorkspace(context, projectId);
     const response = await fetch(`${url}/workspace/${encodeURIComponent(workspaceId)}/scheduled-tasks${path}`, {
       method, headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
       body: data === undefined ? undefined : JSON.stringify(data), signal: AbortSignal.timeout(30000),
@@ -26,12 +27,14 @@ function schedulingClock() {
 }
 const [once, interval, rrule] = TaskScheduleSchema.options;
 const timeZone = once.shape.timeZone.default(localTimeZone).describe("Optional. Defaults to this computer's local time zone. Only override when the user specifies another zone; do not ask for it.");
+const projectId = z.string().min(1).optional().describe("Owning project ID returned by the global schedule list. Omit to run in the current Assistant or project.");
 const create = ScheduledTaskInputSchema.omit({ sessionId: true, reuseChat: true, model: true }).extend({
+  projectId,
   newChatEachRun: z.boolean().default(false),
   schedule: z.discriminatedUnion("kind", [once.extend({ timeZone }), interval.extend({ timeZone }), rrule.extend({ timeZone })]),
 });
-const get = z.object({ taskId: z.uuid() });
-const update = z.object({ taskId: z.uuid(), revision: z.number().int().positive(), patch: ScheduledTaskInputSchema.partial().extend({ reuseChat: ScheduledTaskInputSchema.shape.reuseChat.removeDefault().optional(), pinSession: ScheduledTaskInputSchema.shape.pinSession.removeDefault().optional(), model: ScheduledTaskInputSchema.shape.model.removeDefault().optional(), projectAccess: ScheduledTaskInputSchema.shape.projectAccess.removeDefault().optional(), status: z.enum(["active", "paused"]).optional() }) });
+const get = z.object({ projectId, taskId: z.uuid() });
+const update = z.object({ projectId, taskId: z.uuid(), revision: z.number().int().positive(), patch: ScheduledTaskInputSchema.partial().extend({ reuseChat: ScheduledTaskInputSchema.shape.reuseChat.removeDefault().optional(), pinSession: ScheduledTaskInputSchema.shape.pinSession.removeDefault().optional(), model: ScheduledTaskInputSchema.shape.model.removeDefault().optional(), projectAccess: ScheduledTaskInputSchema.shape.projectAccess.removeDefault().optional(), status: z.enum(["active", "paused"]).optional() }) });
 
 async function runningModel(client: ReturnType<typeof createOpencodeClient> | undefined, context: OpenCodeContext) {
   if (!client || !context.sessionID || !context.messageID) throw new Error("Could not read the current chat model. Retry creating the scheduled task.");

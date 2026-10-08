@@ -114,11 +114,14 @@ function isTextContent(target: OpenTarget): boolean {
 }
 
 export function ArtifactPanel(props: ArtifactPanelProps) {
-  if (props.tab.pendingImportId || props.tab.sourceProject || props.tab.searchSources || props.tab.reviewCitation || props.tab.reviewRecognition || !props.client || !props.workspaceId) return <ArtifactPanelContent {...props} />;
+  if (props.tab.source || props.tab.pendingImportId || props.tab.sourceProject || props.tab.searchSources || props.tab.reviewCitation || props.tab.reviewRecognition || !props.client || !props.workspaceId) return <ArtifactPanelContent {...props} />;
   return <PersistentArtifactPanel {...props} />;
 }
 
-export function ArtifactPanelContent({ sessionId, tab, client, workspaceId, workspaceRoot, isRemoteWorkspace = false, localReadOnly = false, onClose }: ArtifactPanelProps) {
+export function ArtifactPanelContent({ sessionId, tab, client, workspaceId: parentWorkspaceId, workspaceRoot: parentWorkspaceRoot, isRemoteWorkspace: parentIsRemoteWorkspace = false, localReadOnly = false, onClose }: ArtifactPanelProps) {
+  const workspaceId = tab.source?.workspaceId ?? parentWorkspaceId;
+  const workspaceRoot = tab.source?.workspaceRoot ?? parentWorkspaceRoot;
+  const isRemoteWorkspace = tab.source ? false : parentIsRemoteWorkspace;
   const transcriptTargets = usePanelTabStore((state) => state.transcriptArtifactTargets[tab.sourceSessionId ?? sessionId] ?? EMPTY_TRANSCRIPT_TARGETS);
   const artifactTargets = useMemo(() => transcriptTargets.filter(isCollectibleArtifactTarget), [transcriptTargets]);
   // Tabs opened from the workspace file browser carry their own path, so they
