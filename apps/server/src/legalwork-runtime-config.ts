@@ -81,6 +81,7 @@ import { readEigenweltConnection } from "./eigenwelt-connection-store.js";
 import { repairRuntimeProviders } from "./runtime-provider-repair.js";
 import { sandboxEngineAgents, sandboxEnginePermissions } from "./agent-sandbox/engine-policy.js";
 import { REVIEW_AGENT, reviewAgentConfig } from "./reviews/agent.js";
+import { readChannelProvider } from "./channel-model.js";
 
 const LEGALWORK_AGENT_PROMPT = `You are LegalWork — an AI agent that works alongside legal professionals inside a law firm.
 
@@ -253,6 +254,7 @@ export async function buildLegalworkRuntimeConfigObject(
     ...storedProviders,
     // Global injection wins over any stale per-workspace eigenwelt block.
     ...(paidProvider ? { [EIGENWELT_PROVIDER_ID]: paidProvider } : {}),
+    ...(await readChannelProvider()),
   };
   // The firm's tool permissions apply over the member's own.
   const { permission } = config
@@ -396,7 +398,7 @@ export async function writeLegalworkRuntimeConfigFile(config: ServerConfig, work
     const content = await buildLegalworkRuntimeConfig(config, workspaceId);
     await mkdir(runtimeStorageDir(config), { recursive: true });
     const tmp = `${path}.${randomUUID()}.tmp`;
-    await writeFile(tmp, content, "utf8");
+    await writeFile(tmp, content, { encoding: "utf8", mode: 0o600 });
     await rename(tmp, path);
     // The firm's enforced layer is rewritten with it, before every reload.
     await writeOrgPolicyEngineLayer(config, await buildOrgPolicyEngineLayerFor(config, workspaceId));
