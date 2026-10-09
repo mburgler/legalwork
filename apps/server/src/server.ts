@@ -2,6 +2,9 @@ import { readSkillPackageFile } from "./skill-package.js";
 import { startSandboxSettingsSync } from "./agent-sandbox/sync.js";
 import { stopMessageQueue } from "./session-message-queue.js";
 import { withSessionExecution } from "./session-execution-gate.js";
+import { AssistantPush } from "./push/service.js";
+import { readPushEvents } from "./push/events.js";
+import { registerPushRoutes } from "./push/routes.js";
 import { MainAssistant, isMainAssistant } from "./main-assistant.js";
 import { cloudExecutionFetch, prepareCloudExecution } from "./cloud-sync/lifecycle.js";
 import { ensureMorningBriefing, hasBriefingSessionThreshold } from "./assistant-briefing.js";
@@ -1033,6 +1036,11 @@ export async function startServer(config: ServerConfig, runtimeOptions: { docume
   const routes = createRoutes(config, approvals, tokens, env, officeTools, restartReloadWatchers, benchmarkRunner, ocr, preparation, reviews, corpus, scheduledTasks, mainAssistant, delegations, sessionQueue);
 
   let ready = false;
+  const push = await AssistantPush.open(runtimeDbPath(config),
+    () => readPushEvents(config, mainAssistant, delegations, workspace => createWorkspaceOpencodeClient(config, workspace)),
+    owner => tokens.isActiveHash(owner));
+  registerPushRoutes(routes, push, readJsonBodyLimited);
+
   const serverOptions: {
     hostname: string;
     port: number;
@@ -1271,6 +1279,7 @@ export async function startServer(config: ServerConfig, runtimeOptions: { docume
     }
   }
 
+  const stopPush = push.start();
   const stopMainAssistant = config.readOnly ? () => {} : mainAssistant.start(() => {
     if (config.cloudSync && !config.cloudSync.canExecute()) return Promise.resolve();
     return ensureMorningBriefing(config, scheduledTasks, mainAssistant,
@@ -1285,6 +1294,7 @@ export async function startServer(config: ServerConfig, runtimeOptions: { docume
     stop: async () => {
       stopSandboxSettingsSync();
       agentSandbox.stop();
+      await stopPush();
       approvals.dispose();
       stopMessageQueue(config);
       await corpus.stop();
@@ -2027,6 +2037,7 @@ function createRoutes(
     },
   });
   registerScheduledTaskRoutes({ routes, config, store: scheduledTasks, jsonResponse, readJsonBodyLimited, ensureWritable, requireClientScope, resolveWorkspace,
+    getStatuses: async workspace => unwrapOpencodeResult(await createWorkspaceOpencodeClient(config, workspace).session.status({}, { signal: AbortSignal.timeout(3000) }), "/session/status"),
     listSessions: async (workspace, search) => unwrapOpencodeResult(await createWorkspaceOpencodeClient(config, workspace).session.list({ limit: 200, search }), "/session"),
     getSession: async (workspace, id) => {
       const result = await createWorkspaceOpencodeClient(config, workspace).session.get({ sessionID: id });
