@@ -2,6 +2,7 @@
 import {
   ArrowRight,
   Bell,
+  Bot,
   ChevronDown,
   FileStack,
   FolderLock,
@@ -44,6 +45,7 @@ const globalItems = (): SettingsItem[] => [
     desc: t("settings.tab_description_account"),
   },
   { tab: "ai", icon: Zap, title: t("settings.tab_ai"), desc: `${t("settings.tab_description_ai")}.` },
+  { tab: "assistant", icon: Bot, title: t("assistant.title"), desc: t("assistant.settings_description") },
   { tab: "tabular-review", icon: TableProperties, title: t("review.title"), desc: t("review.defaults_scope") },
   { tab: "extensions", icon: Puzzle, title: t("sidebar.integrations"), desc: `${t("settings.tab_description_extensions")}.` },
   {
