@@ -401,23 +401,15 @@ export const LegalWorkExtensionsPreview = async (input: SavedConversations = {})
         const response = await uiBridgeRequest("/execute", { method: "POST", timeoutMs: 120_000, body: { actionId: "markdown.create", args: { ...args, sessionId: context.sessionID } } });
         if (getBooleanProperty(response, "ok") !== true) throw new Error(getStringProperty(response, "error") ?? "The Markdown draft could not be saved.");
         return JSON.stringify(response);
-    },
-    inapp_documents_open: {
-      description: "Show a file in this session's side viewer when requested. Do not use this for background reading or triage. The main Assistant requires userRequested=true based on an explicit user request. For a new deliverable from a template, supply copy_to to copy it to a new workspace filename and open that copy without changing the template. path is relative to the workspace or connection_id root. Then use matching inapp_* tools for the live draft. Preserves unsaved drafts and refuses to overwrite an existing copy_to file.",
-      args: {
-        userRequested: explicitUiRequest,
-        path: z.string().min(1).max(4096).describe("Relative file path in the workspace or connection root."),
-        connection_id: z.string().min(1).max(200).optional().describe("For connected files, the ID from storage_list_connections. Omit for workspace files."),
-        copy_to: z.string().min(1).max(4096).optional().describe("For a new deliverable, copy the source to this new workspace-relative filename (same extension), then open the copy for editing. The original is unchanged."),
       },
     },
     inapp_documents_open: {
       description: "Prepare a file for this task without changing the user's visible workspace or tab, unless show is set. For a new deliverable from a template, supply copy_to to copy it to a new workspace filename and open that copy without changing the template. path is relative to the workspace or connection_id root. Then use inapp_documents_list and matching inapp_* read/edit tools to work on its draft, including in the background. Preserves unsaved drafts and refuses to overwrite an existing copy_to file.",
-      args: inAppDocumentsOpenArgsSchema.shape,
+      args: inAppDocumentsOpenArgsSchema.extend({ userRequested: explicitUiRequest }).shape,
       async execute(rawArgs: unknown, context: OpenCodeContext) {
         if (!context.sessionID) return JSON.stringify({ ok: false, error: "A session is required to open a file." });
-        const args = inAppDocumentsOpenArgsSchema.parse(rawArgs);
-        if (args.show) await requireRequestedAssistantUi(context, args.show);
+        const args = inAppDocumentsOpenArgsSchema.extend({ userRequested: explicitUiRequest }).parse(rawArgs);
+        if (args.show) await requireRequestedAssistantUi(context, args.userRequested);
         return JSON.stringify(await uiBridgeRequest("/execute", { method: "POST", timeoutMs: 900_000, body: {
           actionId: "documents.open", args: { sessionId: context.sessionID, path: args.path, ...(args.connection_id ? { connectionId: args.connection_id } : {}), ...(args.copy_to ? { copyTo: args.copy_to } : {}), ...(args.show ? { show: true } : {}) },
         } }));
@@ -435,8 +427,7 @@ export const LegalWorkExtensionsPreview = async (input: SavedConversations = {})
       description: "Select a prepared document for this task without switching any visible tabs or discarding other drafts.",
       args: officeFileSchema.shape,
       async execute(rawArgs: unknown, context: OpenCodeContext) {
-        const args = officeFileSchema.extend({ userRequested: explicitUiRequest }).parse(rawArgs);
-        await requireRequestedAssistantUi(context, args.userRequested);
+        const args = officeFileSchema.parse(rawArgs);
         return JSON.stringify(await uiBridgeRequest("/execute", { method: "POST", body: { actionId: "documents.select_open", args: { sessionId: context.sessionID ?? "", path: args.path } } }));
       },
     },
@@ -688,8 +679,8 @@ export const LegalWorkExtensionsPreview = async (input: SavedConversations = {})
       async execute(rawArgs: unknown, context: OpenCodeContext = {}) {
         requireInteractiveRun(context);
         const { actionId, args, userRequested } = uiExecuteArgsSchema.parse(rawArgs);
-        await requireRequestedAssistantUi(context, userRequested);
         const browserContext = actionId.startsWith("browser.") ? await requireBrowserNetwork(context) : {};
+        await requireRequestedAssistantUi(context, userRequested);
         const result = await uiBridgeRequest("/execute", {
           method: "POST",
           body: { actionId, args: { ...args, ...browserContext }, callerSessionId: context.sessionID },
@@ -705,7 +696,7 @@ export const LegalWorkExtensionsPreview = async (input: SavedConversations = {})
       async execute(rawArgs: unknown, context: OpenCodeContext) {
         const args = browserOpenUrlArgsSchema.parse(rawArgs);
         const browserContext = await requireBrowserNetwork(context);
-        await requireRequestedAssistantUi(context, args.userRequested);
+        if (args.show) await requireRequestedAssistantUi(context, args.userRequested);
         const result = await uiBridgeRequest("/execute", {
           method: "POST",
           body: {

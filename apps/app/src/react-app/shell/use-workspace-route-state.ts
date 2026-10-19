@@ -72,8 +72,6 @@ export function useWorkspaceRouteState(input: UseWorkspaceRouteStateInput) {
   const params = useParams<{ workspaceId?: string; sessionId?: string }>();
   const routeWorkspaceId = params.workspaceId?.trim() || "";
   const selectedSessionId = params.sessionId?.trim() || null;
-  const routeSelectionRef = useRef({ routeWorkspaceId, selectedSessionId });
-  routeSelectionRef.current = { routeWorkspaceId, selectedSessionId };
   const navigateToWorkspaceSession = useCallback((workspaceId: string, sessionId?: string | null, options?: { replace?: boolean }) => {
     const id = workspaceId.trim();
     if (!id) {
@@ -458,7 +456,6 @@ export function useWorkspaceRouteState(input: UseWorkspaceRouteStateInput) {
       // the user's last-active workspace from localStorage, the desktop's
       // activeId, the server's activeId, then the first known workspace.
       const persistedActiveId = readActiveWorkspaceId();
-      const { routeWorkspaceId, selectedSessionId } = routeSelectionRef.current;
       let nextWorkspaceId = resolveRouteWorkspaceId(nextWorkspaces, [
         routeWorkspaceId,
         persistedActiveId,

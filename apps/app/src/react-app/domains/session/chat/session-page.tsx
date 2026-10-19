@@ -1595,7 +1595,7 @@ export function SessionPage(props: SessionPageProps) {
             }}
             renderChat={(sessionId, active) => props.surface ? <WorkspaceChat
               {...props.surface!}
-              assistantName={props.sidebar.assistantProfile?.name ?? t("assistant.title")}
+              assistantName={props.sidebar.assistantActive ? props.sidebar.assistantProfile?.name ?? t("assistant.title") : undefined}
               active={active}
               client={props.legalworkServerClient!}
               environmentClient={props.environmentClient}

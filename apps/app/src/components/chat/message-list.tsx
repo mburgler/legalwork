@@ -656,15 +656,14 @@ const UserMessage = React.memo(
                   </MessageContent>
                 ) : null}
                 {files.map(file => <AssistantSharedFileCard key={file.path} file={{ path: file.path, title: file.name, filename: file.name, description: t("assistant.shared_with_project") }} />)}
-                {(assistantChat || !isStreaming) && (
-                  <MessageActions
+                <MessageActions
                     className={cn(
-                      "flex items-center gap-0 opacity-0 transition-opacity duration-150 group-hover:opacity-100"
+                      "flex items-center gap-0 opacity-0 transition-opacity duration-150 group-hover:opacity-100 focus-within:opacity-100"
                     )}
                   >
                     <MessageTimestamp message={message} className="mr-1.5" />
                     <CopyMessageButton messages={[message]} />
-                    {messageText ? (
+                    {messageText && (assistantChat || !isStreaming) ? (
                       <MessageAction tooltip={t("message_list.edit_message")}>
                         <Button
                           variant="ghost"
@@ -677,7 +676,7 @@ const UserMessage = React.memo(
                         </Button>
                       </MessageAction>
                     ) : null}
-                    {!assistantChat && <><MessageAction tooltip={t("message_list.branch_in_new_chat")}>
+                    {!assistantChat && !isStreaming && <><MessageAction tooltip={t("message_list.branch_in_new_chat")}>
                       <Button
                         variant="ghost"
                         size="icon"
@@ -700,7 +699,6 @@ const UserMessage = React.memo(
                       </Button>
                     </MessageAction></>}
                   </MessageActions>
-                )}
               </div>
             }
           />
@@ -717,7 +715,7 @@ const UserMessage = React.memo(
                 {t("common.copy")}
               </ContextMenuItem>
             ) : null}
-            {!assistantChat && <><ContextMenuItem disabled={readOnly} onClick={() => onForkAtMessage(message.id)}>
+            {!assistantChat && !isStreaming && <><ContextMenuItem disabled={readOnly} onClick={() => onForkAtMessage(message.id)}>
               <Split className="size-4 rotate-90" />
               {t("message_list.branch_in_new_chat")}
             </ContextMenuItem>
@@ -1120,7 +1118,7 @@ export function MessageList({ showWelcome = true, eigenweltPlan = null, messages
         )
       })}
 
-      {assistantChat ? (["submitted", "streaming", "retrying"].includes(status) && !error && <AssistantTypingBubble />) : status === "streaming" && !hasLiveTool && !hasActivityTail && <LoadingMessage />}
+      {assistantChat ? (["submitted", "streaming", "retrying"].includes(status) && !error && <AssistantTypingBubble />) : status === "streaming" && !hasLiveTool && <LoadingMessage />}
       {retryStatus ? <RetryMessage status={retryStatus} /> : null}
       {error && !hasSessionErrorMessage ? <ErrorMessage error={error} /> : null}
     </div>

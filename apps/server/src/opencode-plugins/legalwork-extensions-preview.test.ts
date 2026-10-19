@@ -469,7 +469,10 @@ test("document-open schemas retain required paths and optional argument limits",
 
 test("Assistant UI changes need an explicit user request; background reads do not open files", async () => {
   const previousUrl = process.env.LEGALWORK_SERVER_URL;
-  const server = Bun.serve({ port: 0, fetch: () => Response.json({ workspace: { path: "/Assistant" } }) });
+  const server = Bun.serve({ port: 0, fetch: req => new URL(req.url).pathname === "/workspaces"
+    ? Response.json({ items: [{ id: "assistant", path: "/Assistant" }] })
+    : new URL(req.url).pathname.includes("/sandbox/session/") ? Response.json({ enabled: false, networkMode: "allow" })
+    : Response.json({ workspace: { path: "/Assistant" } }) });
   process.env.LEGALWORK_SERVER_URL = server.url.origin;
   const calls: unknown[] = [];
   await withBridge({}, body => { calls.push(body); return { ok: true }; });
@@ -484,12 +487,11 @@ test("Assistant UI changes need an explicit user request; background reads do no
   try {
     const plugin = await LegalWorkExtensionsPreview();
     const context = { sessionID: "assistant", directory: "/Assistant" };
-    await expect(plugin.tool.inapp_documents_open.execute({ path: "agreement.pdf" }, context)).rejects.toThrow("only when the user explicitly asks");
-    await expect(plugin.tool.inapp_documents_select.execute({ path: "agreement.pdf" }, context)).rejects.toThrow("only when the user explicitly asks");
+    await expect(plugin.tool.inapp_documents_open.execute({ path: "agreement.pdf", show: true }, context)).rejects.toThrow("only when the user explicitly asks");
     await expect(plugin.tool.legalwork_ui_execute_action.execute({ actionId: "documents.open", args: { path: "agreement.pdf" } }, context)).rejects.toThrow("only when the user explicitly asks");
-    await expect(plugin.tool.legalwork_browser_open_url.execute({ url: "https://example.com" }, context)).rejects.toThrow("only when the user explicitly asks");
+    await expect(plugin.tool.legalwork_browser_open_url.execute({ url: "https://example.com", show: true }, context)).rejects.toThrow("only when the user explicitly asks");
     expect(calls).toHaveLength(0);
-    await plugin.tool.inapp_documents_open.execute({ path: "agreement.pdf", userRequested: true }, context);
+    await plugin.tool.inapp_documents_open.execute({ path: "agreement.pdf", show: true, userRequested: true }, context);
     expect(calls).toHaveLength(1);
   } finally {
     server.stop(true);

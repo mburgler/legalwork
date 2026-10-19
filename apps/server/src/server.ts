@@ -948,41 +948,6 @@ export async function startServer(config: ServerConfig, runtimeOptions: { docume
       if (!result.response?.ok) throw new ApiError(502, "schedule_send", "Could not confirm delivery. Check the chat before resuming this task.");
     }, true),
   });
-  const routes = createRoutes(config, approvals, tokens, env, officeTools, restartReloadWatchers, benchmarkRunner, ocr, preparation, reviews, corpus, scheduledTasks, wikiStore, wikiSync, mainAssistant);
-  configureWikiAgentSessionLookup(config, async (workspace, sessionID, directory, signal) =>
-    unwrapOpencodeResult(await createDirectoryOpencodeClient(config, workspace, directory).session.get({ sessionID }, { signal }), "/session"));
-  registerAgentSandboxRoutes({ routes, config, sandbox: agentSandbox, resolveWorkspace, requireClientScope, readJsonBodyLimited, jsonResponse,
-    sessionLineage: async (workspace, sessionID) => {
-      const client = createWorkspaceOpencodeClient(config, workspace);
-      const lineage: string[] = [];
-      let id: string | undefined = sessionID;
-      while (id) {
-        if (lineage.includes(id) || lineage.length >= 64) throw new ApiError(400, "sandbox_session", "Invalid chat ancestry.");
-        const currentId: string = id;
-        const session = unwrapOpencodeResult(await client.session.get({ sessionID: currentId }, { signal: AbortSignal.timeout(10000) }), "/session");
-        const directory = resolveOpencodeDirectory(workspace);
-        if (!directory || resolve(session.directory) !== resolve(directory)) throw new ApiError(403, "sandbox_session", "This chat belongs to a different workspace.");
-        lineage.push(id);
-        id = session.parentID;
-      }
-      return lineage;
-    },
-    agentRules: async (workspace, sessionID, agentName) => {
-      const client = createWorkspaceOpencodeClient(config, workspace);
-      const session = unwrapOpencodeResult(await client.session.get({ sessionID }), "/session");
-      const directory = resolveOpencodeDirectory(workspace);
-      if (!directory || resolve(session.directory) !== resolve(directory)) {
-        throw new ApiError(403, "sandbox_session", "The command session belongs to a different workspace.");
-      }
-      const agents = unwrapOpencodeResult(await client.app.agents(), "/agent");
-      const agent = agents.find((item) => item.name === agentName);
-      if (!agent) throw new ApiError(403, "sandbox_agent", "The selected agent is unavailable.");
-      // Built-in host shell and web tools stay denied. Managed tools carry
-      // the original permissions under their separate identities.
-      const engineConfig = unwrapOpencodeResult(await client.config.get(), "/config");
-      return managedPermissionRules(explicitFileApprovals(agent.permission, [engineConfig.permission, engineConfig.agent?.[agentName]?.permission]), session.permission ?? []);
-    },
-  });
   const guardWikiWorkspace = async (actor: Actor | undefined, workspaceId: string, method: string) => {
     const wiki = (await wikiStore.list()).find((item) => item.workspaceId === workspaceId);
     assertWikiWorkspaceAccess(actor, wiki);
@@ -1048,7 +1013,41 @@ export async function startServer(config: ServerConfig, runtimeOptions: { docume
   const sessionQueue = await createAssistantSessionQueue(runtimeDbPath(config), { workspace: id => resolveWorkspace(config, id),
     available: () => !config.cloudSync || config.cloudSync.canExecute(),
     client: workspace => createWorkspaceOpencodeClient(config, workspace), assistant: mainAssistant, changed: () => announceSyncChange(config, "sessions") });
-  const routes = createRoutes(config, approvals, tokens, env, officeTools, restartReloadWatchers, benchmarkRunner, ocr, preparation, reviews, corpus, scheduledTasks, mainAssistant, delegations, sessionQueue);
+  const routes = createRoutes(config, approvals, tokens, env, officeTools, restartReloadWatchers, benchmarkRunner, ocr, preparation, reviews, corpus, scheduledTasks, wikiStore, wikiSync, mainAssistant, delegations, sessionQueue);
+  configureWikiAgentSessionLookup(config, async (workspace, sessionID, directory, signal) =>
+    unwrapOpencodeResult(await createDirectoryOpencodeClient(config, workspace, directory).session.get({ sessionID }, { signal }), "/session"));
+  registerAgentSandboxRoutes({ routes, config, sandbox: agentSandbox, resolveWorkspace, requireClientScope, readJsonBodyLimited, jsonResponse,
+    sessionLineage: async (workspace, sessionID) => {
+      const client = createWorkspaceOpencodeClient(config, workspace);
+      const lineage: string[] = [];
+      let id: string | undefined = sessionID;
+      while (id) {
+        if (lineage.includes(id) || lineage.length >= 64) throw new ApiError(400, "sandbox_session", "Invalid chat ancestry.");
+        const currentId: string = id;
+        const session = unwrapOpencodeResult(await client.session.get({ sessionID: currentId }, { signal: AbortSignal.timeout(10000) }), "/session");
+        const directory = resolveOpencodeDirectory(workspace);
+        if (!directory || resolve(session.directory) !== resolve(directory)) throw new ApiError(403, "sandbox_session", "This chat belongs to a different workspace.");
+        lineage.push(id);
+        id = session.parentID;
+      }
+      return lineage;
+    },
+    agentRules: async (workspace, sessionID, agentName) => {
+      const client = createWorkspaceOpencodeClient(config, workspace);
+      const session = unwrapOpencodeResult(await client.session.get({ sessionID }), "/session");
+      const directory = resolveOpencodeDirectory(workspace);
+      if (!directory || resolve(session.directory) !== resolve(directory)) {
+        throw new ApiError(403, "sandbox_session", "The command session belongs to a different workspace.");
+      }
+      const agents = unwrapOpencodeResult(await client.app.agents(), "/agent");
+      const agent = agents.find((item) => item.name === agentName);
+      if (!agent) throw new ApiError(403, "sandbox_agent", "The selected agent is unavailable.");
+      // Built-in host shell and web tools stay denied. Managed tools carry
+      // the original permissions under their separate identities.
+      const engineConfig = unwrapOpencodeResult(await client.config.get(), "/config");
+      return managedPermissionRules(explicitFileApprovals(agent.permission, [engineConfig.permission, engineConfig.agent?.[agentName]?.permission]), session.permission ?? []);
+    },
+  });
   registerAssistantChannelHistoryRoutes({ routes, history: assistantChannelHistory, requireClientScope, json: jsonResponse });
   addRoute(routes, "GET", "/assistant/cloud", "client", async ctx => { requireClientScope(ctx, "viewer"); return jsonResponse(await cloudAssistantSetup.status()); });
   addRoute(routes, "POST", "/assistant/cloud", "client", async ctx => { requireClientScope(ctx, "collaborator"); return jsonResponse(await cloudAssistantSetup.enable(), 202); });
