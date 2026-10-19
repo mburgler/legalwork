@@ -240,6 +240,7 @@ import {
   type EigenweltHubKind,
 } from "./eigenwelt-hub.js";
 import { startSyncEvents } from "./eigenwelt-sync-events.js";
+import { startConnectorSync } from "./connectors/sync.js";
 import { firmHubConnectorNames, firmHubSkills, onFirmHubChange, readFirmHubSkill, readFirmHubView, scheduleFirmHubSync, setFirmHubAdded, setFirmHubMemberKey } from "./firm-hub.js";
 import { appliedOrgPolicy, onOrgPolicyChange, readOrgPolicyView, releaseOrgPolicyKey, requireOrgPolicyAllows, requireOrgPolicyToolsUnmanaged, requireOrgPolicyUnmanaged, scheduleOrgPolicySync } from "./org-policy.js";
 import { orgPolicyEngineLayerIntact, orgPolicyPermissions, writeOrgPolicyEngineLayer } from "./org-policy-engine.js";
@@ -841,6 +842,7 @@ export async function startServer(config: ServerConfig, runtimeOptions: { docume
   configureProjectSync(config, { onWorkspacesChanged: () => restartReloadWatchers() });
   const stopProjectSyncTimer = startProjectSyncTimer(config);
   // The firm pokes this computer when something changed, so rounds start at once.
+  const stopConnectorSync = startConnectorSync(config);
   const stopSyncEvents = startSyncEvents(config);
   const stopSandboxSettingsSync = startSandboxSettingsSync(config);
   // The firm's policy: pulled now and whenever the firm pokes; what changes
@@ -1328,6 +1330,7 @@ export async function startServer(config: ServerConfig, runtimeOptions: { docume
       stopTaskSync();
       stopProjectSyncTimer();
       stopSyncEvents();
+      stopConnectorSync();
       stopOrgPolicy();
       stopFirmHub();
       stopTaskReminders();
