@@ -1,11 +1,12 @@
 import { AssistantProfileSchema, AssistantSharedFilesSchema } from "@legalwork/types/main-assistant";
 import type { TextPart } from "@opencode-ai/sdk/v2/client";
 import type { UIMessage } from "ai";
+import { scheduledTextMetadata } from "../../scheduled-tasks/scheduled-message";
 
 export function textPartProviderMetadata(part: TextPart) {
   const sender = AssistantProfileSchema.safeParse(part.metadata?.legalworkAssistantSender);
   const files = AssistantSharedFilesSchema.safeParse(part.metadata?.legalworkSharedFiles);
-  return { opencode: { partId: part.id, ...(part.time?.end ? { textComplete: true } : {}), ...(sender.success ? { legalworkAssistantSender: sender.data } : {}), ...(files.success ? { legalworkSharedFiles: files.data } : {}) } };
+  return { opencode: { ...scheduledTextMetadata(part).opencode, ...(part.time?.end ? { textComplete: true } : {}), ...(sender.success ? { legalworkAssistantSender: sender.data } : {}), ...(files.success ? { legalworkSharedFiles: files.data } : {}) } };
 }
 
 export function assistantMessageSender(message: UIMessage) {
