@@ -13,6 +13,7 @@
  * tighten them instead of widening call sites.
  */
 import type { WorkspaceWire } from "./workspace.js";
+import type { LauncherCaptureResult, LauncherDesktopStatus, LauncherDraftFile, LauncherInsertResult, LauncherInvocation, LauncherOrigin, LauncherSelectionResult, LauncherSettings, LauncherWindowState } from "./launcher.js";
 
 export type ActaportToolset = "records" | "finance" | "administration" | "uploads";
 export type ActaportConnectionStatus = {
@@ -28,20 +29,24 @@ import type {
   AudioDiarizationState,
   AudioDictationPermissionKind,
   AudioDictationReadiness,
+  AudioDictationMicrophoneInput,
+  AudioDictationMicrophoneState,
   AudioModelDiskCandidate,
   AudioModelImportResult,
   AudioModelState,
   AudioPermissionKind,
   AudioRecorderBootstrap,
+  AudioMeetingStatus,
   AudioTapApp,
   AudioRecordingDetail,
+  AudioTranscriptEdit,
   AudioRecordingMeta,
   AudioRecordingStartInput,
   AudioSaveToWorkspaceResult,
   AudioSystemDictationPasteResult,
-  AudioSystemDictationMode,
   AudioSystemDictationRuntimeState,
   AudioSystemDictationStatus,
+  AudioDictationAppearance,
   AudioTranscribeLanguage,
   AudioTranscriberStatus,
 } from "./audio.js";
@@ -697,6 +702,7 @@ export type DesktopCommandMap = {
   audioRecordingCancel: { args: [recordingId: string]; result: unknown };
   audioRecordingsList: { args: []; result: AudioRecordingMeta[] };
   audioRecordingGet: { args: [recordingId: string]; result: AudioRecordingDetail | null };
+  audioRecordingEditTranscript: { args: [recordingId: string, edit: AudioTranscriptEdit]; result: AudioRecordingDetail };
   audioRecordingDelete: { args: [recordingId: string]; result: AudioRecordingMeta[] };
   /** Rename a recording (active or on disk); returns the refreshed list. */
   audioRecordingRename: { args: [recordingId: string, title: string]; result: AudioRecordingMeta[] };
@@ -738,6 +744,10 @@ export type DesktopCommandMap = {
   audioOverlaySetVisible: { args: [visible: boolean]; result: { visible: boolean } };
   audioOverlayGetVisible: { args: []; result: { visible: boolean } };
   audioSystemDictationGet: { args: []; result: AudioSystemDictationStatus };
+  audioSystemDictationSetAppearance: {
+    args: [appearance: AudioDictationAppearance];
+    result: AudioSystemDictationStatus;
+  };
   audioSystemDictationSetEnabled: {
     args: [enabled: boolean];
     result: AudioSystemDictationStatus;
@@ -746,17 +756,20 @@ export type DesktopCommandMap = {
     args: [accelerator: string];
     result: AudioSystemDictationStatus;
   };
-  audioSystemDictationSetMode: {
-    args: [mode: AudioSystemDictationMode];
-    result: AudioSystemDictationStatus;
-  };
   audioSystemDictationSetShortcutCapture: {
     args: [active: boolean];
     result: AudioSystemDictationStatus;
   };
   audioSystemDictationOpenSettings: { args: []; result: AudioSystemDictationStatus };
+  audioMeetingGet: { args: []; result: AudioMeetingStatus };
+  audioMeetingDetectionSet: { args: [enabled: boolean]; result: AudioMeetingStatus };
+  audioMeetingSetState: {
+    args: [state: AudioMeetingStatus["state"], recordingId?: string, error?: string];
+    result: AudioMeetingStatus;
+  };
+  audioMeetingOpen: { args: []; result: void };
   audioSystemDictationSetState: {
-    args: [state: AudioSystemDictationRuntimeState, message?: string];
+    args: [state: AudioSystemDictationRuntimeState, message?: string, locale?: "en" | "de"];
     result: AudioSystemDictationStatus;
   };
   audioSystemDictationPaste: {
@@ -768,6 +781,13 @@ export type DesktopCommandMap = {
    * monitoring, accessibility, automation), probed live against the OS.
    */
   audioSystemDictationReadiness: { args: []; result: AudioDictationReadiness };
+  audioSystemDictationMicrophonesGet: { args: []; result: AudioDictationMicrophoneState };
+  audioSystemDictationMicrophonesUpdate: {
+    args: [inputs: AudioDictationMicrophoneInput[], defaultDeviceId: string | null];
+    result: AudioDictationMicrophoneState;
+  };
+  audioSystemDictationMicrophoneSelect: { args: [selection: string]; result: AudioDictationMicrophoneState };
+  audioSystemDictationMicrophoneActive: { args: [name: string]; result: void };
   /**
    * Fire the strongest available re-prompt for one dictation permission
    * (native prompt where macOS still allows one, exact pane deep link
@@ -819,6 +839,30 @@ export type DesktopCommandMap = {
     args: [badge: { count: number; overlayDataUrl?: string | null; description?: string }];
     result: boolean;
   };
+
+  /**
+   * Global Assistant launcher: its own background presence, shortcut registry,
+   * panel window, external origin/selection/insertion, screen capture and the
+   * shared draft file. Native window and process identifiers never leave the
+   * main process; the renderer only sees opaque origin IDs.
+   */
+  launcherStatus: { args: []; result: LauncherDesktopStatus };
+  launcherSettingsSet: { args: [patch: Partial<LauncherSettings>]; result: LauncherDesktopStatus };
+  launcherWindowControl: { args: [command: "show" | "hide" | "pin" | "unpin" | "expand" | "resize" | "state" | "dialog-begin" | "dialog-end", payload?: { height?: number; route?: string; conversationId?: string }]; result: LauncherWindowState };
+  launcherOriginGet: { args: []; result: LauncherOrigin | null };
+  launcherOriginSelection: { args: [originId: string]; result: LauncherSelectionResult };
+  launcherOriginInsert: { args: [originId: string, text: string]; result: LauncherInsertResult };
+  launcherClipboardRead: { args: []; result: { text: string; capturedAt: number } };
+  launcherCaptureWindow: { args: []; result: LauncherCaptureResult };
+  launcherCaptureRegion: { args: []; result: LauncherCaptureResult };
+  launcherDraftsRead: { args: []; result: LauncherDraftFile };
+  launcherDraftsWrite: { args: [file: LauncherDraftFile, expectedVersion: number]; result: boolean };
+  launcherInvocationsDrain: { args: []; result: LauncherInvocation[] };
+  launcherAttentionSet: { args: [input: { count: number; recording: boolean }]; result: void };
+  launcherRaycastPairing: { args: [action: "status" | "enable" | "disable"]; result: { enabled: boolean; path: string | null } };
+  launcherApprovalReply: { args: [id: string, decision: "allow" | "deny"]; result: boolean };
+  /** Dictate into the captured origin app, or open the meeting recorder: the two other voice destinations. */
+  launcherVoice: { args: [action: "dictate" | "record"]; result: boolean };
 
   // Window / OS utilities (dunder commands)
   __openPath: { args: [target: string]; result: unknown };

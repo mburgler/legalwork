@@ -99,6 +99,7 @@ import { McpView, type McpViewProps } from "@/react-app/domains/settings/pages/m
 import { RecoveryView } from "@/react-app/domains/settings/pages/recovery-view";
 import { OfficeAddinsView } from "@/react-app/domains/settings/pages/office-addins-view";
 import { RecorderSettingsView } from "@/react-app/domains/settings/pages/recorder-view";
+import { LauncherSettingsView } from "@/react-app/domains/settings/pages/launcher-view";
 import { MessagingView } from "@/react-app/domains/settings/pages/messaging-view";
 import { SkillsView } from "@/react-app/domains/settings/pages/skills-view";
 import { WorkflowsView } from "@/react-app/domains/settings/pages/workflows-view";
@@ -106,7 +107,7 @@ import { UpdatesView } from "@/react-app/domains/settings/pages/updates-view";
 import { useDebugViewModel } from "@/react-app/domains/settings/state/debug-view-model";
 import { useMessagingViewProps } from "@/react-app/domains/settings/state/messaging-view-state";
 import { useElectronUpdaterState } from "@/react-app/domains/settings/state/electron-updater-state";
-import { UPDATE_AUTO_CHECK_STORAGE_KEY } from "@/react-app/domains/settings/state/update-status-store";
+import { loadUpdatePreferences, saveUpdatePreferences, type UpdatePreferences } from "@/react-app/domains/settings/state/update-preferences";
 import { changeOrgPolicySetting, useOrgPolicy, useOrgPolicyForbids, useOrgPolicyStore } from "@/react-app/domains/connections/org-policy";
 import { orgChatEngineId } from "@legalwork/types/org-policy";
 import { useSyncEvents } from "@/react-app/kernel/sync-events";
@@ -188,9 +189,6 @@ function reconcileSelectedWorkspaceId(
 }
 
 const SETTINGS_HIDE_TITLEBAR_KEY = "legalwork.react.settings.hide-titlebar";
-// Shared with the sidebar update badge's background check.
-const SETTINGS_UPDATE_AUTO_CHECK_KEY = UPDATE_AUTO_CHECK_STORAGE_KEY;
-const SETTINGS_UPDATE_AUTO_DOWNLOAD_KEY = "legalwork.react.settings.update-auto-download";
 
 function parseSettingsPath(pathname: string): {
   tab: SettingsTab;
@@ -229,6 +227,7 @@ function parseSettingsPath(pathname: string): {
     case "recovery":
     case "office-addins":
     case "recorder":
+    case "launcher":
     case "debug":
     case "skills":
     case "workflows":
@@ -437,12 +436,18 @@ function SettingsRouteContent(props: SettingsSurfaceProps = {}) {
     return window.localStorage.getItem("legalwork.developerMode") === "1";
   });
   const [hideTitlebar, setHideTitlebar] = useState(() => readStoredBoolean(SETTINGS_HIDE_TITLEBAR_KEY, false));
-  const [updateAutoCheck, setUpdateAutoCheck] = useState(() =>
-    readStoredBoolean(SETTINGS_UPDATE_AUTO_CHECK_KEY, true),
-  );
-  const [updateAutoDownload, setUpdateAutoDownload] = useState(() =>
-    readStoredBoolean(SETTINGS_UPDATE_AUTO_DOWNLOAD_KEY, false),
-  );
+  const [updateAutoCheck, setUpdateAutoCheck] = useState(false);
+  const [updateAutoDownload, setUpdateAutoDownload] = useState(false);
+  const [updatePreferencesLoaded, setUpdatePreferencesLoaded] = useState(false);
+  const saveUpdatePreference = async (patch: Partial<UpdatePreferences>) => {
+    try {
+      const preferences = await saveUpdatePreferences(patch);
+      setUpdateAutoCheck(preferences.autoCheck);
+      setUpdateAutoDownload(preferences.autoDownload);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : t("notifications.updater_error"));
+    }
+  };
   const [configActionStatus, setConfigActionStatus] = useState<string | null>(null);
   const [revealConfigBusy, setRevealConfigBusy] = useState(false);
   const [resetConfigBusy, setResetConfigBusy] = useState(false);
@@ -844,7 +849,7 @@ function SettingsRouteContent(props: SettingsSurfaceProps = {}) {
   const evaluationsOff = useOrgPolicyForbids("evaluations.allow");
   const analyticsEnabled = local.prefs.analyticsEnabled === true && firmAnalytics?.value !== false;
   const onReleaseChannelChange = useCallback(
-    (next: "stable" | "alpha") => {
+    (next: "stable" | "prerelease" | "alpha") => {
       local.setPrefs((previous) => ({ ...previous, releaseChannel: next }));
     },
     [local],
@@ -1180,12 +1185,15 @@ function SettingsRouteContent(props: SettingsSurfaceProps = {}) {
   }, [hideTitlebar]);
 
   useEffect(() => {
-    writeStoredBoolean(SETTINGS_UPDATE_AUTO_CHECK_KEY, updateAutoCheck);
-  }, [updateAutoCheck]);
-
-  useEffect(() => {
-    writeStoredBoolean(SETTINGS_UPDATE_AUTO_DOWNLOAD_KEY, updateAutoDownload);
-  }, [updateAutoDownload]);
+    let cancelled = false;
+    void loadUpdatePreferences().then((preferences) => {
+      if (cancelled) return;
+      setUpdateAutoCheck(preferences.autoCheck);
+      setUpdateAutoDownload(preferences.autoDownload);
+      setUpdatePreferencesLoaded(true);
+    });
+    return () => { cancelled = true; };
+  }, []);
 
   const { markRouteReady: markBootRouteReady } = useBootState();
   const refreshRouteState = useMemo(() => {
@@ -2230,10 +2238,6 @@ function SettingsRouteContent(props: SettingsSurfaceProps = {}) {
               if (analyticsEnabled) discardPendingAnalytics();
               local.setPrefs((previous) => ({ ...previous, analyticsEnabled: !analyticsEnabled }));
             })}
-            hideAppMode={local.prefs.hideAppMode}
-            onChangeHideAppMode={(mode) => {
-              local.setPrefs((previous) => ({ ...previous, hideAppMode: mode }));
-            }}
           />
         );
       case "shell":
@@ -2388,6 +2392,7 @@ function SettingsRouteContent(props: SettingsSurfaceProps = {}) {
             pluginCreation={extensionsStore}
             skillImports={extensionsStore}
             skillTools={extensionsStore}
+            libraryConnection={selectedWorkspaceEndpoint?.client ?? legalworkClient}
             canImportSkills={canWriteWorkspaceSkills}
             canAddConnector={!isRemoteWorkspace || (routeLegalworkStatus === "connected" && Boolean(routeLegalworkCapabilities?.mcp?.write))}
             canAddSkill={canWriteWorkspaceSkills}
@@ -2488,14 +2493,14 @@ function SettingsRouteContent(props: SettingsSurfaceProps = {}) {
       case "updates":
         return (
           <UpdatesView
-            busy={busy}
+            busy={busy || !updatePreferencesLoaded}
             webDeployment={platform.platform === "web"}
             appVersion={electronUpdaterState.appVersion}
             updateEnv={electronUpdaterState.updateEnv}
             updateAutoCheck={effectiveUpdateAutoCheck}
-            toggleUpdateAutoCheck={() => void changeOrgPolicySetting("updates.autoCheck", () => setUpdateAutoCheck(!effectiveUpdateAutoCheck))}
+            toggleUpdateAutoCheck={() => void changeOrgPolicySetting("updates.autoCheck", () => saveUpdatePreference({ autoCheck: !effectiveUpdateAutoCheck }))}
             updateAutoDownload={effectiveUpdateAutoDownload}
-            toggleUpdateAutoDownload={() => void changeOrgPolicySetting("updates.autoDownload", () => setUpdateAutoDownload(!effectiveUpdateAutoDownload))}
+            toggleUpdateAutoDownload={() => void changeOrgPolicySetting("updates.autoDownload", () => saveUpdatePreference({ autoDownload: !effectiveUpdateAutoDownload }))}
             updateStatus={electronUpdaterState.updateStatus}
             anyActiveRuns={activeReloadBlockingSessions.length > 0}
             checkForUpdates={electronUpdaterState.checkForUpdates}
@@ -2540,7 +2545,17 @@ function SettingsRouteContent(props: SettingsSurfaceProps = {}) {
       case "office-addins":
         return <OfficeAddinsView />;
       case "recorder":
-        return recorderOff ? <SettingsStack><OrgPolicyFeatureOff policyKey="recorder.allow" /></SettingsStack> : <RecorderSettingsView />;
+        return recorderOff ? <SettingsStack><OrgPolicyFeatureOff policyKey="recorder.allow" /></SettingsStack> : (
+          <RecorderSettingsView
+            busy={busy}
+            hideAppMode={local.prefs.hideAppMode}
+            onChangeHideAppMode={(mode) => {
+              local.setPrefs((previous) => ({ ...previous, hideAppMode: mode }));
+            }}
+          />
+        );
+      case "launcher":
+        return <LauncherSettingsView client={legalworkClient} />;
       case "debug":
         return <DebugView {...debugViewProps} />;
       default:

@@ -1,4 +1,5 @@
 import type { CalendarEventDraft } from "@legalwork/types/calendar-event-draft";
+import type { LauncherFileTransferInput, LauncherPreview, SavedSearch, SavedSearchInput, AssistantContextItem, AssistantConversation, AssistantConversationPage, AssistantExecutionTarget, AssistantSubmission, AssistantSubmitInput, AssistantWorkItem, AssistantWorkStatus, LauncherCatalogEntry, LauncherInvocation, LauncherSearchKind, LauncherSearchResponse, LauncherStagedContext, QuickAction, QuickActionInput } from "@legalwork/types/launcher";
 import type { EmailDraft } from "@legalwork/types/email-draft";
 import type { ConnectorWriteSetting, ConnectorCloudAccess } from "@legalwork/types/connectors";
 import type { PluginCreateOptions, PluginCreateRequest, PluginImportCandidate, PluginImportPreview, PluginImportProvider, PluginImportRequest } from "@legalwork/types/plugin-import";
@@ -201,7 +202,7 @@ export type EigenweltManifestModel = {
 /** The signed-in seat's included usage for the current window (cents, plus a percentage). */
 export type EigenweltUsage = {
   /** A week on current platforms, a day on platforms from before the weekly allowance. */
-  window: "day" | "week";
+  window: "day" | "week" | "month";
   allowanceCents: number;
   remainingCents: number;
   /** Share of this window's allowance consumed, 0–100 (server-computed). */
@@ -733,6 +734,7 @@ export type LegalworkClaudePluginComponent = {
 };
 
 export type LegalworkClaudePluginPreview = {
+  review?: PluginImportPreview;
   pluginId: string;
   name: string;
   description: string | null;
@@ -1803,6 +1805,7 @@ export function createLegalworkServerClient(options: { baseUrl: string; token?: 
         timeoutMs: timeouts.config,
       }),
     getOcrSettings: () => requestJson<OcrSettingsView>(baseUrl, "/ocr/settings", { token, hostToken, timeoutMs: timeouts.config }),
+    setOcrAutoDownload: (enabled: boolean) => requestJson<OcrSettingsView>(baseUrl, "/ocr/auto-download", { token, hostToken, method: "PUT", body: { enabled }, timeoutMs: timeouts.config }),
     setDefaultOcrEngine: (engineId: string) => requestJson<OcrSettingsView>(baseUrl, "/ocr/default", { token, hostToken, method: "PUT", body: { engineId }, timeoutMs: timeouts.config }),
     saveOcrServer: (input: OcrServerInput, id?: string) => requestJson<OcrSettingsView>(baseUrl, id ? `/ocr/servers/${encodeURIComponent(id)}` : "/ocr/servers", { token, hostToken, method: id ? "PUT" : "POST", body: input, timeoutMs: timeouts.config }),
     setOcrMemberKey: (id: string, apiKey: string | null) => requestJson<OcrSettingsView>(baseUrl, `/ocr/firm-engines/${encodeURIComponent(id)}/key`, { token, hostToken, method: "PUT", body: { apiKey }, timeoutMs: timeouts.config }),
@@ -2380,6 +2383,8 @@ export function createLegalworkServerClient(options: { baseUrl: string; token?: 
         method: "DELETE",
         timeoutMs: timeouts.config,
       }),
+    checkPluginImportUpdate: (workspaceId: string, pluginId: string) => requestJson<{ source: PluginImportRequest["source"]; scope: PluginImportRequest["scope"]; root: string; asWorkflow?: boolean; changed: boolean; preview: PluginImportPreview }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/plugin-imports/${encodeURIComponent(pluginId)}/update`, { token, hostToken, timeoutMs: 90_000 }),
+    rollbackPluginImport: (workspaceId: string, pluginId: string) => requestJson<LegalworkCloudPluginInstallResult>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/plugin-imports/${encodeURIComponent(pluginId)}/rollback`, { token, hostToken, method: "POST", body: {} }),
     readPackageComponent: (workspaceId: string, pluginId: string, path: string) =>
       requestJson<{ content: string }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/cloud-plugins/${encodeURIComponent(pluginId)}/file?path=${encodeURIComponent(path)}`, { token, hostToken, timeoutMs: timeouts.config }),
     pluginCreateOptions: (workspaceId: string) =>
@@ -2387,7 +2392,7 @@ export function createLegalworkServerClient(options: { baseUrl: string; token?: 
     createWorkflowPlugin: (workspaceId: string, payload: PluginCreateRequest) =>
       requestJson<LegalworkCloudPluginInstallResult>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/workflow-plugins`, { token, hostToken, method: "POST", body: payload, timeoutMs: 120000 }),
     discoverPluginImports: (workspaceId: string, provider: PluginImportProvider) =>
-      requestJson<{ items: PluginImportCandidate[] }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/plugin-imports/discover?provider=${provider}`, { token, hostToken, timeoutMs: timeouts.config }),
+      requestJson<{ items: PluginImportCandidate[] }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/plugin-imports/discover?provider=${provider}`, { token, hostToken, timeoutMs: 30_000 }),
     previewPluginImports: (workspaceId: string, payload: PluginImportRequest) =>
       requestJson<{ items: PluginImportPreview[] }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/plugin-imports/preview`, { token, hostToken, method: "POST", body: payload, timeoutMs: 120000 }),
     installPluginImport: (workspaceId: string, payload: PluginImportRequest) =>
@@ -2400,7 +2405,7 @@ export function createLegalworkServerClient(options: { baseUrl: string; token?: 
         body: { ...payload, dryRun: true },
         timeoutMs: timeouts.config,
       }),
-    installClaudePlugin: (workspaceId: string, payload: { url: string; ref?: string }) =>
+    installClaudePlugin: (workspaceId: string, payload: { url: string; ref?: string; digest?: string; validationId?: string; acknowledgePartial?: boolean }) =>
       requestJson<LegalworkCloudPluginInstallResult & { preview: LegalworkClaudePluginPreview }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/claude-plugins`, {
         token,
         hostToken,
@@ -2565,13 +2570,6 @@ export function createLegalworkServerClient(options: { baseUrl: string; token?: 
         `/workspace/${encodeURIComponent(workspaceId)}/hub/share/workflow`,
         { token, hostToken, method: "POST", body: payload, timeoutMs: timeouts.workspaceExport },
       ),
-    /** Matter id to title, so a source row can name its matter. */
-    legalMemoryMatters: (workspaceId: string) =>
-      requestJson<{ ok: boolean; matters: Record<string, string> }>(
-        baseUrl,
-        `/workspace/${encodeURIComponent(workspaceId)}/legalmemory/matters`,
-        { token, hostToken, method: "POST", body: {}, timeoutMs: timeouts.config },
-      ),
     storageOAuthProviders: (workspaceId: string) =>
       requestJson<{ providers: StorageOAuthProvider[] }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/storage/oauth/providers`, { token, hostToken }),
     storageOAuthStatus: (workspaceId: string, id: string) =>
@@ -2588,6 +2586,8 @@ export function createLegalworkServerClient(options: { baseUrl: string; token?: 
       requestJson<{ ok: true }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/storage/test${id ? `?connectionId=${encodeURIComponent(id)}` : ""}`, { token, hostToken, method: "POST", body: input, timeoutMs: 90_000 }),
     removeStorageConnection: (workspaceId: string, id: string, version?: number) =>
       requestJson<{ ok: true }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/storage/${encodeURIComponent(id)}${version ? `?version=${version}` : ""}`, { token, hostToken, method: "DELETE", timeoutMs: 30_000 }),
+    shareStorageConnection: (workspaceId: string, input: StorageInput) =>
+      requestJson<{ connection: StorageConnection }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/storage/team`, { token, hostToken, method: "POST", body: input, timeoutMs: 60_000 }),
     setTeamStorageInstalled: (workspaceId: string, id: string, installed: boolean) =>
       requestJson<{ ok: true }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/storage/${encodeURIComponent(id)}/installation`, { token, hostToken, method: "POST", body: { installed }, timeoutMs: 30_000 }),
     projectFolderSources: () => requestJson<{ sources: (Omit<RemoteFolderSelection, "path"> & { name: string })[]; error?: string }>(baseUrl, "/storage/project-sources", { token, hostToken, timeoutMs: 60_000 }),
@@ -2876,6 +2876,58 @@ export function createLegalworkServerClient(options: { baseUrl: string; token?: 
     updateAssistantProfile: (profile: AssistantProfile) => requestJson<{ profile: AssistantProfile }>(baseUrl, "/assistant/profile", { token, hostToken, method: "PATCH", body: profile }),
     mainAssistantCurrent: (projectFields?: ProjectField[]) => requestJson<{ workspace: LegalworkWorkspaceInfo; day: { date: string; sessionId: string }; profile: AssistantProfile }>(baseUrl, "/assistant/current", { token, hostToken, method: "POST", body: { projectFields } }),
     mainAssistantHistory: (before?: string, limit = 14) => requestJson<{ days: { date: string; sessionId: string }[]; nextBefore: string | null }>(baseUrl, `/assistant/history?limit=${limit}${before ? `&before=${encodeURIComponent(before)}` : ""}`, { token, hostToken }),
+    // Global Assistant: explicit conversations, identified submissions, unified search, catalog, work and staged context.
+    assistantConversations: (input: { query?: string; cursor?: string; limit?: number; archived?: boolean } = {}) => requestJson<AssistantConversationPage>(baseUrl, `/assistant/conversations?${new URLSearchParams({ ...(input.query ? { query: input.query } : {}), ...(input.cursor ? { cursor: input.cursor } : {}), ...(input.limit ? { limit: String(input.limit) } : {}), ...(input.archived ? { archived: "true" } : {}) })}`, { token, hostToken }),
+    ensureAssistantWorkspace: (projectFields?: ProjectField[]) => requestJson<{ workspace: LegalworkWorkspaceInfo; profile: AssistantProfile }>(baseUrl, "/assistant/workspace", { token, hostToken, method: "POST", body: { projectFields } }),
+    assistantConversationCurrent: () => requestJson<{ workspace: LegalworkWorkspaceInfo | null; conversation: AssistantConversation | null; day: { date: string; sessionId: string } | null; profile: AssistantProfile }>(baseUrl, "/assistant/conversations/current", { token, hostToken }),
+    createAssistantConversation: (input: { title?: string; origin?: string } = {}) => requestJson<{ conversation: AssistantConversation }>(baseUrl, "/assistant/conversations", { token, hostToken, method: "POST", body: input }),
+    assistantConversation: (id: string) => requestJson<{ conversation: AssistantConversation }>(baseUrl, `/assistant/conversations/${encodeURIComponent(id)}`, { token, hostToken }),
+    patchAssistantConversation: (id: string, patch: { title?: string; pinned?: boolean; archived?: boolean }) => requestJson<{ conversation: AssistantConversation }>(baseUrl, `/assistant/conversations/${encodeURIComponent(id)}`, { token, hostToken, method: "PATCH", body: patch }),
+    updateAssistantConversation: (id: string, patch: { title?: string; pinned?: boolean; archived?: boolean }) => requestJson<{ conversation: AssistantConversation }>(baseUrl, `/assistant/conversations/${encodeURIComponent(id)}`, { token, hostToken, method: "PATCH", body: patch }),
+    submitAssistantMessage: (conversationId: string, input: AssistantSubmitInput) => requestJson<{ submission: AssistantSubmission; conversation: AssistantConversation }>(baseUrl, `/assistant/conversations/${encodeURIComponent(conversationId)}/messages`, { token, hostToken, method: "POST", body: input, timeoutMs: 45_000 }),
+    assistantConversationForSession: (sessionId: string) => requestJson<{ conversation: AssistantConversation | null }>(baseUrl, `/assistant/conversation-for-session/${encodeURIComponent(sessionId)}`, { token, hostToken }),
+    assistantSubmission: (requestId: string) => requestJson<{ submission: AssistantSubmission }>(baseUrl, `/assistant/submissions/${encodeURIComponent(requestId)}`, { token, hostToken }),
+    assistantConversationAttention: (id: string) => requestJson<{ items: AssistantAttentionItem[] }>(baseUrl, `/assistant/conversations/${encodeURIComponent(id)}/attention`, { token, hostToken }),
+    replyAssistantConversationAttention: (id: string, reply: AssistantAttentionReply) => requestJson<{ ok: boolean }>(baseUrl, `/assistant/conversations/${encodeURIComponent(id)}/attention/reply`, { token, hostToken, method: "POST", body: reply }),
+    assistantAttentionAll: async (cursor?: string) => {
+      const items: AssistantAttentionItem[] = [], unavailable: string[] = [];
+      let next = cursor;
+      do {
+        const page = await requestJson<AssistantAttentionPage>(baseUrl, `/assistant/attention${next ? `?cursor=${encodeURIComponent(next)}` : ""}`, { token, hostToken });
+        items.push(...page.items); unavailable.push(...page.unavailable); next = page.nextCursor ?? undefined;
+      } while (next);
+      return { items, unavailable, nextCursor: null };
+    },
+    recordingTranscript: (recordingId: string, options?: { offset?: number; limit?: number }) => requestJson<{ recording: { id: string; title: string }; content: string; totalCharacters: number; nextOffset: number | null }>(baseUrl, `/recorder/recordings/${encodeURIComponent(recordingId)}?${new URLSearchParams({ ...(options?.offset ? { offset: String(options.offset) } : {}), ...(options?.limit ? { limit: String(options.limit) } : {}) })}`, { token, hostToken }),
+    assistantConversationConstraint: (id: string) => requestJson<{ target: AssistantExecutionTarget | null }>(baseUrl, `/assistant/conversations/${encodeURIComponent(id)}/constraint`, { token, hostToken }),
+    launcherSearch: (input: { query: string; kinds?: LauncherSearchKind[]; projectId?: string | null; content?: boolean; limit?: number; fileTypes?: string[] | null; modifiedAfter?: number | null }, signal?: AbortSignal) => requestJson<LauncherSearchResponse>(baseUrl, `/launcher/search?${new URLSearchParams({ q: input.query, ...(input.kinds?.length ? { kinds: input.kinds.join(",") } : {}), ...(input.projectId ? { projectId: input.projectId } : {}), ...(input.content ? { content: "1" } : {}), ...(input.limit ? { limit: String(input.limit) } : {}), ...(input.fileTypes?.length ? { types: input.fileTypes.join(",") } : {}), ...(input.modifiedAfter ? { since: String(input.modifiedAfter) } : {}) })}`, { token, hostToken, signal, timeoutMs: 20_000 }),
+    transferLauncherFile: (input: LauncherFileTransferInput) => requestJson<{ ok: boolean; path: string }>(baseUrl, "/launcher/files/transfer", { token, hostToken, method: "POST", body: input }),
+    launcherCatalog: (projectId?: string | null) => requestJson<{ entries: LauncherCatalogEntry[]; unavailable: string[] }>(baseUrl, `/launcher/catalog${projectId ? `?projectId=${encodeURIComponent(projectId)}` : ""}`, { token, hostToken }),
+    quickActions: () => requestJson<{ actions: QuickAction[] }>(baseUrl, "/launcher/actions", { token, hostToken }),
+    createQuickAction: (input: QuickActionInput) => requestJson<{ action: QuickAction }>(baseUrl, "/launcher/actions", { token, hostToken, method: "POST", body: input }),
+    updateQuickAction: (id: string, patch: Partial<QuickActionInput>) => requestJson<{ action: QuickAction }>(baseUrl, `/launcher/actions/${encodeURIComponent(id)}`, { token, hostToken, method: "PATCH", body: patch }),
+    deleteQuickAction: (id: string) => requestJson<{ ok: boolean }>(baseUrl, `/launcher/actions/${encodeURIComponent(id)}`, { token, hostToken, method: "DELETE" }),
+    recordQuickActionUse: (id: string) => requestJson<{ action: QuickAction | null }>(baseUrl, `/launcher/actions/${encodeURIComponent(id)}/used`, { token, hostToken, method: "POST", body: {} }),
+    renderQuickAction: (id: string, inputs: { selection?: string; clipboard?: string; files?: string[]; arguments?: string }) => requestJson<{ prompt: string; action: QuickAction }>(baseUrl, `/launcher/actions/${encodeURIComponent(id)}/render`, { token, hostToken, method: "POST", body: inputs }),
+    savedSearches: () => requestJson<{ searches: SavedSearch[] }>(baseUrl, "/launcher/searches", { token, hostToken }),
+    createSavedSearch: (input: SavedSearchInput) => requestJson<{ search: SavedSearch }>(baseUrl, "/launcher/searches", { token, hostToken, method: "POST", body: input }),
+    deleteSavedSearch: (id: string) => requestJson<{ ok: boolean }>(baseUrl, `/launcher/searches/${encodeURIComponent(id)}`, { token, hostToken, method: "DELETE" }),
+    recordSavedSearchUse: (id: string) => requestJson<{ search: SavedSearch | null }>(baseUrl, `/launcher/searches/${encodeURIComponent(id)}/used`, { token, hostToken, method: "POST", body: {} }),
+    launcherPreview: (input: { kind: LauncherSearchKind; id: string; workspaceId?: string | null }, signal?: AbortSignal) => requestJson<LauncherPreview>(baseUrl, `/launcher/preview?${new URLSearchParams({ kind: input.kind, id: input.id, ...(input.workspaceId ? { workspaceId: input.workspaceId } : {}) })}`, { token, hostToken, signal, timeoutMs: 20_000 }),
+    stageLauncherContext: (items: AssistantContextItem[], source: LauncherInvocation["source"], ttlMs?: number) => requestJson<{ id: string; expiresAt: number; items: number }>(baseUrl, "/launcher/context", { token, hostToken, method: "POST", body: { items, source, ...(ttlMs ? { ttlMs } : {}) } }),
+    consumeLauncherContext: (id: string) => requestJson<LauncherStagedContext>(baseUrl, `/launcher/context/${encodeURIComponent(id)}/consume`, { token, hostToken, method: "POST", body: {} }),
+    registerLauncherInvocation: (invocation: LauncherInvocation) => requestJson<{ invocation: LauncherInvocation; duplicate: boolean; context: { id: string; items: number; expiresAt: number } | null }>(baseUrl, "/launcher/invocations", { token, hostToken, method: "POST", body: invocation }),
+    assistantWork: async (filter: { status?: AssistantWorkStatus; projectId?: string } = {}) => {
+      const items: AssistantWorkItem[] = [];
+      let offset: number | null = 0;
+      do {
+        const query = new URLSearchParams({ offset: String(offset), limit: "100", ...(filter.status ? { status: filter.status } : {}), ...(filter.projectId ? { projectId: filter.projectId } : {}) });
+        const page: { items: AssistantWorkItem[]; nextOffset: number | null } = await requestJson(baseUrl, `/assistant/work?${query}`, { token, hostToken, timeoutMs: 30_000 });
+        items.push(...page.items); offset = page.nextOffset ?? null;
+      } while (offset !== null);
+      return { items };
+    },
+    assistantWorkAction: (item: Pick<AssistantWorkItem, "workspaceId" | "sessionId">, action: "stop" | "redirect" | "reply", input: { prompt?: string; requestId?: string } = {}) => requestJson<{ ok: boolean; status?: string }>(baseUrl, `/assistant/work/${encodeURIComponent(item.workspaceId)}/${encodeURIComponent(item.sessionId)}/${action}`, { token, hostToken, method: "POST", body: input }),
     scheduledTasks: () => requestJson<{ tasks: ScheduledTask[] }>(baseUrl, "/scheduled-tasks", { token, hostToken }),
     scheduledTask: (workspaceId: string, id: string) => requestJson<{ task: ScheduledTask; runs: ScheduledRun[] }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/scheduled-tasks/${encodeURIComponent(id)}`, { token, hostToken }),
     scheduledTaskChats: (workspaceId: string, search = "") => requestJson<{ sessions: { id: string; title: string }[] }>(baseUrl, `/workspace/${encodeURIComponent(workspaceId)}/scheduled-tasks/chats?search=${encodeURIComponent(search)}`, { token, hostToken }),

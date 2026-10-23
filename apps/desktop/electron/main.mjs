@@ -31,11 +31,19 @@ import { DictationPermissions } from "./audio/dictation-permissions.mjs";
 import { AppAudioTap } from "./audio/app-audio.mjs";
 import { CallOverlay } from "./audio/call-overlay.mjs";
 import { DictationHud } from "./audio/dictation-hud.mjs";
+import { MeetingMonitor } from "./audio/meeting-monitor.mjs";
+import { DictationMicrophones } from "./audio/dictation-microphones.mjs";
 import { RecorderService } from "./audio/recorder-service.mjs";
 import { SystemDictationService } from "./audio/system-dictation.mjs";
 import { SystemKeyMonitor } from "./audio/system-key-monitor.mjs";
 import { PowerLifecycle, PowerSessions } from "./power-lifecycle.mjs";
 import { AppTray } from "./tray.mjs";
+import { LauncherService } from "./launcher/launcher-service.mjs";
+import { LauncherWindow } from "./launcher/launcher-window.mjs";
+import { OriginService, execHelper } from "./launcher/origin-service.mjs";
+import { ScreenCapture } from "./launcher/screen-capture.mjs";
+import { RaycastPairing } from "./launcher/raycast-pairing.mjs";
+import { resolveKeyMonitorPath } from "./audio/system-key-monitor.mjs";
 import { pinWindowsProcessQoS } from "./windows-qos.mjs";
 import { registerMigrationIpc } from "./migration.mjs";
 import { createRuntimeManager, resolveLegalworkServerConfigPath } from "./runtime.mjs";
@@ -745,6 +753,7 @@ function recorderService() {
       appAudioAvailable: () => appAudioTap.isAvailable(),
       powerSessions,
       pinProcessQoS: pinWindowsProcessQoS,
+      resolveCloudConnection: (model) => recorderServerRequest("/transcription/connection", { model }),
     });
     if (mainWindow && !mainWindow.isDestroyed()) {
       recorderServiceInstance.subscribe(mainWindow.webContents);
@@ -753,13 +762,74 @@ function recorderService() {
   return recorderServiceInstance;
 }
 
+async function recorderServerRequest(route, body) {
+  const info = assertLegalworkServerReady(await runtimeManager.legalworkServerInfo());
+  const response = await fetch(`${info.baseUrl}${route}`, {
+    method: body ? "POST" : "GET",
+    headers: { Authorization: `Bearer ${info.ownerToken || info.clientToken}`,
+      ...(info.hostToken ? { "X-LegalWork-Host-Token": info.hostToken } : {}),
+      ...(body ? { "Content-Type": "application/json" } : {}) },
+    ...(body ? { body: JSON.stringify(body) } : {}),
+    signal: AbortSignal.timeout(10_000), redirect: "error",
+  });
+  if (!response.ok) throw new Error("Cloud transcription is unavailable. Sign in and check your organisation’s model settings.");
+  return response.json();
+}
+
 const callOverlay = new CallOverlay({
   getMainWindow: () => mainWindow,
   onCreated: (window) => recorderService().subscribe(window.webContents),
   onVisibilityChange: (visible) => recorderService().broadcast({ type: "overlay-visibility", visible }),
 });
 
-const dictationHud = new DictationHud();
+const dictationHud = new DictationHud({
+  onStart: () => systemDictation.toggleHandsFree(),
+  onStop: () => recorderService().broadcast({ type: "system-dictation-stop" }),
+  onCancel: () => recorderService().broadcast({ type: "system-dictation-cancel" }),
+  onMeetingStart: () => {
+    if (["starting", "listening", "transcribing", "inserting"].includes(systemDictation.runtimeState)) return;
+    meetingMonitor.requestStart();
+  },
+  onMeetingStop: () => recorderService().broadcast({ type: "meeting-recording-stop" }),
+  onMeetingDismiss: () => {
+    if (meetingMonitor.status().state === "error") meetingMonitor.setRecording({ state: "idle", error: null });
+    else meetingMonitor.dismiss();
+  },
+  onMeetingOpen: () => { void openMeetingRecorder(); },
+  onMicrophoneMenu: () => {
+    void dictationMicrophones.refresh().then(state => dictationHud.showMicrophoneMenu(state, selection => {
+      void dictationMicrophones.select(selection).catch(error => console.warn("[dictation-microphone]", error.message));
+    })).catch(error => console.warn("[dictation-microphone]", error.message));
+  },
+  onAssistant: () => { void launcherService.toggle("hud"); },
+});
+let recorderRendererReady = false;
+let pendingMeetingStart = null;
+let pendingMeetingOpen = false;
+// Assigned once the launcher service exists; meeting and dictation changes reach the panel through it.
+let notifyLauncherVoice = () => {};
+const meetingMonitor = new MeetingMonitor({
+  app,
+  onChange: status => {
+    recorderService().broadcast({ type: "meeting-status", status });
+    notifyLauncherVoice();
+    void dictationHud.setMeeting(status).catch(error => console.warn("[meeting-hud]", error));
+    syncBackgroundPresence();
+  },
+  onStart: title => {
+    if (!recorderRendererReady) pendingMeetingStart = { title };
+    else recorderService().broadcast({ type: "meeting-recording-start", title });
+  },
+});
+
+async function openMeetingRecorder() {
+  const window = await createMainWindow();
+  if (window.isMinimized()) window.restore();
+  window.show();
+  window.focus();
+  if (!recorderRendererReady) pendingMeetingOpen = true;
+  else recorderService().broadcast({ type: "meeting-recording-open" });
+}
 const systemKeyMonitor = new SystemKeyMonitor({ app, platform: process.platform });
 const dictationPermissions = new DictationPermissions({
   app,
@@ -767,6 +837,14 @@ const dictationPermissions = new DictationPermissions({
   shell,
   captureAuthStatus,
   platform: process.platform,
+});
+const dictationMicrophones = new DictationMicrophones({
+  userDataDir: app.getPath("userData"),
+  nativeInputs: () => dictationPermissions.microphoneInputs(),
+  onChange: status => {
+    recorderService().broadcast({ type: "system-dictation-microphones", status });
+    dictationHud.setMicrophone(status.activeName);
+  },
 });
 
 /**
@@ -800,15 +878,55 @@ const systemDictation = new SystemDictationService({
   onToggle: () => recorderService().broadcast({ type: "system-dictation-toggle" }),
   onPress: () => recorderService().broadcast({ type: "system-dictation-press" }),
   onRelease: () => recorderService().broadcast({ type: "system-dictation-release" }),
-  onCancel: () => recorderService().broadcast({ type: "system-dictation-cancel" }),
+  onCancel: (reason) => recorderService().broadcast({ type: "system-dictation-cancel", reason }),
   onStatus: (status) => {
     recorderService().broadcast({ type: "system-dictation-status", status });
     syncBackgroundPresence();
   },
-  onState: (state, message) => {
-    void dictationHud.setState(state, message);
+  onState: (state, message, locale) => {
+    if (state !== "listening") dictationMicrophones.setActive(null);
+    void dictationHud.setState(state, message, locale).catch((error) => console.warn("[dictation-hud]", error));
   },
 });
+
+// ── Global Assistant launcher (quick panel, shortcuts, origin, capture) ────
+const launcherWindow = new LauncherWindow({
+  appRoot: APP_ROOT, startUrl: APP_START_URL, preloadPath: path.join(__dirname, "preload.cjs"), icon: APP_ICON_IMAGE, userDataDir: app.getPath("userData"),
+  focusedDisplay: () => dictationHud.focusedDisplayId ?? null,
+  onVisibility: state => { launcherService.onVisibility(state.visible); syncBackgroundPresence(); },
+  // While the panel has the keyboard, Escape works its layers; dictation's global Escape waits.
+  onFocusChange: focused => { if (focused) systemDictation.suspendEscape(); else systemDictation.resumeEscape(); },
+  onExpand: route => {
+    void createMainWindow().then(win => {
+      if (win.isDestroyed()) return;
+      if (win.isMinimized()) win.restore();
+      win.show(); win.focus();
+      if (process.platform === "darwin") app.focus({ steal: true });
+      const send = () => win.webContents.send("legalwork:navigate", route);
+      if (win.webContents.isLoading()) win.webContents.once("did-finish-load", send); else send();
+    });
+  },
+});
+const originService = new OriginService({
+  helperPath: resolveKeyMonitorPath(app), exec: execHelper, clipboard,
+  pasteText: text => systemDictation.pasteText(text),
+});
+const screenCapture = new ScreenCapture({ hiddenWhile: work => launcherWindow.hiddenWhile(work), origin: () => originService.current() });
+const raycastPairing = new RaycastPairing({ userDataDir: app.getPath("userData"), serverInfo: () => runtimeManager.legalworkServerInfo() });
+const launcherService = new LauncherService({
+  app, globalShortcut, userDataDir: app.getPath("userData"), window: launcherWindow, origin: originService, capture: screenCapture, pairing: raycastPairing,
+  dictation: () => ({ ...systemDictation.status(), runtimeState: systemDictation.runtimeState }),
+  meeting: () => meetingMonitor.status(),
+  companion: state => { void dictationHud.setCompanion(state).catch(error => console.warn("[launcher-companion]", error)); },
+  onPresenceChanged: () => syncBackgroundPresence(),
+  dictate: () => recorderService().broadcast({ type: "system-dictation-toggle" }),
+  record: () => { void openMeetingRecorder(); },
+  // A recording started by another window's composer is a live microphone owner the panel must not compete with.
+  composerRecording: () => [...recorderService().activeRecordings.keys()].some(id => recordingSenders.get(id) !== undefined && recordingSenders.get(id) !== launcherWindow.webContents()?.id),
+});
+/** Which renderer started each recording. @type {Map<string, number>} */
+const recordingSenders = new Map();
+notifyLauncherVoice = () => launcherService.notifyVoice();
 
 // ── Background presence (tray + close-to-hide) ────────────────────────────
 //
@@ -851,8 +969,13 @@ function trayShortcutLabel(status) {
 
 function keepAliveOnClose() {
   if (systemDictation.status().enabled) return true;
+  // The launcher's own background presence keeps the shortcut and tray entry alive after the window closes.
+  if (launcherService.backgroundPresence()) return true;
+  const meeting = meetingMonitor.status();
+  if (meeting.detectionEnabled && meeting.detectionSupported) return true;
   // A call recording behind a closed window must finalize, not vanish.
-  return (recorderServiceInstance?.activeRecordings.size ?? 0) > 0;
+  return (recorderServiceInstance?.activeRecordings.size ?? 0) > 0
+    || (recorderServiceInstance?.backgroundRecordings.size ?? 0) > 0;
 }
 
 function syncBackgroundPresence() {
@@ -865,12 +988,16 @@ function syncBackgroundPresence() {
     && !mainWindow.isDestroyed()
     && !mainWindow.isVisible()
     && !mainWindow.isMinimized();
-  if (status.enabled || windowHidden) {
+  void dictationHud.setStatus(status).catch((error) => console.warn("[dictation-hud]", error));
+  if (status.enabled || windowHidden || launcherService.backgroundPresence()) {
     // While the window is hidden the tray must exist even if dictation was
     // just disabled — on Windows it is the only way back into the app.
+    const launcherSettings = launcherService.settings.get();
+    const invoke = action => { void launcherService.invoke({ id: `tray_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`, action, source: "tray" }); };
     appTray.ensure({
       dictationEnabled: status.enabled,
       shortcutLabel: trayShortcutLabel(status),
+      launcher: { shortcutLabel: trayShortcutLabel({ registered: true, accelerator: launcherSettings.shortcut, platform: status.platform }), onOpen: () => invoke("open"), onFiles: () => invoke("files"), onAsk: () => invoke("ask"), onWork: () => invoke("work") },
     });
   } else {
     appTray.destroy();
@@ -967,6 +1094,34 @@ function flushPendingDeepLinks() {
   if (!mainWindow?.webContents || pendingDeepLinks.length === 0) return;
   const urls = pendingDeepLinks.splice(0, pendingDeepLinks.length);
   mainWindow.webContents.send(NATIVE_DEEP_LINK_EVENT, urls);
+}
+
+// The complete launcher draft file: the panel and Home share it through revisioned writes.
+const LAUNCHER_DRAFTS_FILE = "launcher-drafts.json";
+let launcherDraftWrites = Promise.resolve();
+async function readLauncherDrafts() {
+  try {
+    const parsed = JSON.parse(await readFile(path.join(app.getPath("userData"), LAUNCHER_DRAFTS_FILE), "utf8"));
+    return { version: Number.isSafeInteger(parsed?.version) ? parsed.version : 0, drafts: parsed?.drafts && typeof parsed.drafts === "object" ? parsed.drafts : {}, leases: parsed?.leases && typeof parsed.leases === "object" ? parsed.leases : {} };
+  } catch {
+    return { version: 0, drafts: {}, leases: {} };
+  }
+}
+function writeLauncherDrafts(file, expectedVersion) {
+  if (!file || typeof file !== "object") return Promise.resolve(false);
+  if (!Number.isSafeInteger(expectedVersion) || file.version !== expectedVersion + 1) return Promise.resolve(false);
+  const snapshot = JSON.stringify(file);
+  if (snapshot.length > 8 * 1024 * 1024) return Promise.resolve(false);
+  const target = path.join(app.getPath("userData"), LAUNCHER_DRAFTS_FILE);
+  const operation = launcherDraftWrites.catch(() => {}).then(async () => {
+    if ((await readLauncherDrafts()).version !== expectedVersion) return false;
+    const temporary = `${target}.${process.pid}.tmp`;
+    await writeFile(temporary, snapshot, "utf8");
+    await rename(temporary, target);
+    return true;
+  });
+  launcherDraftWrites = operation.then(() => undefined);
+  return operation;
 }
 
 function configHomePath() {
@@ -1071,7 +1226,11 @@ function fitSkillName(raw) {
 
 const runtimeManager = createRuntimeManager({
   app,
+  // Chromium networking follows the system/PAC proxy and enterprise certificates.
+  modelDownloadFetch: (url, init) => session.defaultSession.fetch(url, { ...init, credentials: "omit" }),
+  // Host approvals are system UI: a card in the quick panel while it is open, otherwise a dialog on the main window.
   getApprovalWindow: () => mainWindow,
+  presentApproval: (request, signal) => launcherService.presentApproval(request, signal),
   desktopRoot: path.resolve(__dirname, ".."),
   listLocalWorkspacePaths: () => workspaceStore.listLocalWorkspacePaths(),
   recorder: {
@@ -1086,6 +1245,12 @@ const runtimeManager = createRuntimeManager({
         })()`);
       },
     }),
+    listRecordings: () => recorderService().listRecordings(),
+    readRecording: async (id) => {
+      if (!/^[a-zA-Z0-9_-]+$/.test(id)) return null;
+      const detail = await recorderService().getRecording(id);
+      return detail && !detail.meta.ephemeral ? detail : null;
+    },
     listProjectRecordings: async (projectId) => (await recorderService().listRecordings())
       .filter((recording) => recording.projectIds?.includes(projectId))
       .map(({ id, title, durationMs, status, segmentCount }) => ({ id, title, durationMs, status, segmentCount })),
@@ -1277,6 +1442,8 @@ async function bootRuntimeForSelectedWorkspace() {
     name: bootWorkspace.name ?? bootWorkspace.displayName ?? null,
   }).catch(() => undefined);
   const legalworkServer = assertLegalworkServerReady(await runtimeManager.legalworkServerInfo());
+  // The pairing credential is per boot: rewrite it once the server is confirmed up.
+  void raycastPairing.refresh().catch(() => undefined);
   return { ok: true, skipped: false, engine, legalworkServer, workspaceId: bootWorkspace.id ?? null };
 }
 
@@ -2330,7 +2497,8 @@ const desktopCommandHandlers = {
       return undefined;
   },
   "audioRecorderBootstrap": async (event, ...args) => {
-      return recorderService().bootstrap();
+      const cloud = await recorderServerRequest("/transcription/settings").catch(() => ({ models: [], error: "Cloud transcription availability could not be checked." }));
+      return { ...recorderService().bootstrap(), cloud };
   },
   "audioCapturePermissions": async (event, ...args) => {
       return captureAuthStatus(app);
@@ -2391,11 +2559,24 @@ const desktopCommandHandlers = {
       return recorderService().stopTranscriber();
   },
   "audioRecordingStart": async (event, ...args) => {
-      return recorderService().startRecording(args[0] ?? {});
+      const meta = await recorderService().startRecording(args[0] ?? {});
+      recordingSenders.set(meta.id, event.sender.id);
+      notifyLauncherVoice();
+      if (!meta.ephemeral) meetingMonitor.setRecording({ state: "starting", recordingId: meta.id, startedAt: null, error: null });
+      return meta;
   },
   "audioRecordingStop": async (event, ...args) => {
+      queueMicrotask(() => notifyLauncherVoice());
+      const id = String(args[0] ?? "");
+      const meeting = meetingMonitor.status().recordingId === id;
+      if (meeting) meetingMonitor.setRecording({ state: "saving", error: null });
       try {
-        return await recorderService().stopRecording(String(args[0] ?? ""));
+        const meta = await recorderService().stopRecording(id);
+        if (meeting) meetingMonitor.setRecording({ state: "idle", error: null });
+        return meta;
+      } catch (error) {
+        if (meeting) meetingMonitor.setRecording({ state: "error", error: error.message });
+        throw error;
       } finally {
         // A recording that ended behind a hidden window may have been the
         // only reason for the tray keepalive.
@@ -2403,9 +2584,11 @@ const desktopCommandHandlers = {
       }
   },
   "audioRecordingCancel": async (event, ...args) => {
+      queueMicrotask(() => notifyLauncherVoice());
       try {
         return await recorderService().cancelRecording(String(args[0] ?? ""));
       } finally {
+        if (meetingMonitor.status().recordingId === args[0]) meetingMonitor.setRecording({ state: "idle", error: null });
         syncBackgroundPresence();
       }
   },
@@ -2414,6 +2597,9 @@ const desktopCommandHandlers = {
   },
   "audioRecordingGet": async (event, ...args) => {
       return recorderService().getRecording(String(args[0] ?? ""));
+  },
+  "audioRecordingEditTranscript": async (event, ...args) => {
+      return recorderService().editTranscript(String(args[0] ?? ""), args[1]);
   },
   "audioRecordingDelete": async (event, ...args) => {
       return recorderService().deleteRecording(String(args[0] ?? ""));
@@ -2463,6 +2649,9 @@ const desktopCommandHandlers = {
   "audioSystemDictationGet": async (event, ...args) => {
       return systemDictation.status();
   },
+  "audioSystemDictationSetAppearance": async (event, ...args) => {
+      return systemDictation.setAppearance(args[0]);
+  },
   "audioSystemDictationSetEnabled": async (event, ...args) => {
       try {
         return await systemDictation.setEnabled(Boolean(args[0]));
@@ -2478,23 +2667,69 @@ const desktopCommandHandlers = {
         syncBackgroundPresence();
       }
   },
-  "audioSystemDictationSetMode": async (event, ...args) => {
-      return systemDictation.setMode(args[0] === "hold" ? "hold" : "tap");
-  },
   "audioSystemDictationSetShortcutCapture": async (event, ...args) => {
-      return systemDictation.setShortcutCapture(Boolean(args[0]));
+      try {
+        return await systemDictation.setShortcutCapture(Boolean(args[0]));
+      } finally {
+        syncBackgroundPresence();
+      }
   },
   "audioSystemDictationOpenSettings": async (event, ...args) => {
       return systemDictation.openSettings();
   },
+  "audioMeetingGet": async (event) => {
+      // The store subscribes before this handshake. A click during app
+      // startup waits here instead of losing its event and sticking at Start.
+      if (event.sender === mainWindow?.webContents) {
+        recorderRendererReady = true;
+        if (pendingMeetingStart) {
+          const { title } = pendingMeetingStart;
+          pendingMeetingStart = null;
+          recorderService().broadcast({ type: "meeting-recording-start", title });
+        }
+        if (pendingMeetingOpen) {
+          pendingMeetingOpen = false;
+          recorderService().broadcast({ type: "meeting-recording-open" });
+        }
+      }
+      return meetingMonitor.status();
+  },
+  "audioMeetingDetectionSet": async (event, enabled) => meetingMonitor.setDetection(Boolean(enabled)),
+  "audioMeetingSetState": async (event, state, recordingId, error) => {
+      if (state === "starting") return meetingMonitor.setRecording({ state, recordingId: null, startedAt: null, error: null });
+      if (state === "recording" || state === "saving") {
+        const recording = recorderService().activeRecordings.get(recordingId);
+        if (!recording || recording.meta.ephemeral) throw new Error("No meeting recording is active.");
+        return meetingMonitor.setRecording({ state, recordingId, startedAt: meetingMonitor.status().startedAt ?? Date.now(), error: null });
+      }
+      if (state === "idle" || state === "error") {
+        return meetingMonitor.setRecording({ state, error: state === "error" ? String(error ?? "") : null });
+      }
+      return meetingMonitor.status();
+  },
+  "audioMeetingOpen": async (event) => openMeetingRecorder(),
   "audioSystemDictationSetState": async (event, ...args) => {
-      const state = ["idle", "listening", "transcribing", "error"].includes(args[0])
+      const state = ["idle", "starting", "listening", "transcribing", "inserting", "success", "cancelled", "error"].includes(args[0])
         ? args[0]
         : "idle";
-      return systemDictation.setRuntimeState(state, String(args[1] ?? ""));
+      const status = systemDictation.setRuntimeState(state, String(args[1] ?? ""), args[2] === "de" ? "de" : "en");
+      notifyLauncherVoice();
+      return status;
   },
   "audioSystemDictationReadiness": async (event, ...args) => {
       return healDictationMonitor(await dictationPermissions.readiness());
+  },
+  "audioSystemDictationMicrophonesGet": async (event, ...args) => {
+      return dictationMicrophones.refresh();
+  },
+  "audioSystemDictationMicrophonesUpdate": async (event, ...args) => {
+      return dictationMicrophones.update(Array.isArray(args[0]) ? args[0] : [], typeof args[1] === "string" ? args[1] : null);
+  },
+  "audioSystemDictationMicrophoneSelect": async (event, ...args) => {
+      return dictationMicrophones.select(String(args[0]));
+  },
+  "audioSystemDictationMicrophoneActive": async (event, ...args) => {
+      if (["starting", "listening"].includes(dictationHud.state) && typeof args[0] === "string") dictationMicrophones.setActive(args[0].slice(0, 160));
   },
   "audioSystemDictationRequestPermission": async (event, ...args) => {
       const kind = ["microphone", "inputMonitoring", "accessibility", "automation"].includes(args[0])
@@ -2518,6 +2753,59 @@ const desktopCommandHandlers = {
       } finally {
         powerSessions.release("dictation-paste");
       }
+  },
+  "launcherStatus": async (event, ...args) => {
+      return launcherService.status();
+  },
+  "launcherSettingsSet": async (event, ...args) => {
+      return launcherService.updateSettings(args[0] && typeof args[0] === "object" ? args[0] : {});
+  },
+  "launcherWindowControl": async (event, ...args) => {
+      return launcherService.windowControl(/** @type {"show" | "hide" | "pin" | "unpin" | "expand" | "resize" | "state"} */ (String(args[0] ?? "state")), args[1] && typeof args[1] === "object" ? args[1] : undefined);
+  },
+  "launcherOriginGet": async (event, ...args) => {
+      return originService.current();
+  },
+  "launcherOriginSelection": async (event, ...args) => {
+      return originService.selection(String(args[0] ?? ""));
+  },
+  "launcherOriginInsert": async (event, ...args) => {
+      // Insertion is a fresh user action: hide the panel first so focus can return to the destination.
+      launcherWindow.hide();
+      return originService.insert(String(args[0] ?? ""), String(args[1] ?? ""));
+  },
+  "launcherClipboardRead": async (event, ...args) => {
+      return { text: clipboard.readText(), capturedAt: Date.now() };
+  },
+  "launcherCaptureWindow": async (event, ...args) => {
+      return screenCapture.captureWindow();
+  },
+  "launcherCaptureRegion": async (event, ...args) => {
+      return screenCapture.captureRegion();
+  },
+  "launcherDraftsRead": async (event, ...args) => {
+      return readLauncherDrafts();
+  },
+  "launcherDraftsWrite": async (event, ...args) => {
+      return writeLauncherDrafts(args[0], args[1]);
+  },
+  "launcherInvocationsDrain": async (event, ...args) => {
+      return launcherService.drain();
+  },
+  "launcherAttentionSet": async (event, ...args) => {
+      launcherService.setAttention(args[0] && typeof args[0] === "object" ? args[0] : { count: 0, recording: false });
+  },
+  "launcherApprovalReply": async (event, ...args) => {
+      return launcherService.replyApproval(String(args[0] ?? ""), String(args[1] ?? "deny"));
+  },
+  "launcherVoice": async (event, ...args) => {
+      return launcherService.voiceAction(String(args[0] ?? ""));
+  },
+  "launcherRaycastPairing": async (event, ...args) => {
+      const action = String(args[0] ?? "status");
+      if (action === "enable") return raycastPairing.enable();
+      if (action === "disable") return raycastPairing.disable();
+      return raycastPairing.refresh();
   },
   "desktopLoginItemGet": async (event, ...args) => {
       try {
@@ -2804,10 +3092,16 @@ async function createMainWindow() {
   let rendererReloads = 0;
   mainWindow.webContents.on("render-process-gone", (_event, details) => {
     if (details.reason === "clean-exit" || details.reason === "killed") return;
+    recorderRendererReady = false;
+    pendingMeetingStart = null;
+    pendingMeetingOpen = false;
     // The dead renderer owned every active recording's capture; finalize or
     // cancel them so their power blocker and the close-to-hide latch release
     // instead of pinning the machine awake until quit.
-    void recorderServiceInstance?.abandonActiveRecordings().finally(syncBackgroundPresence);
+    void recorderServiceInstance?.abandonActiveRecordings().finally(() => {
+      meetingMonitor.setRecording({ state: "idle", error: null });
+      syncBackgroundPresence();
+    });
     if (rendererReloads >= 3) return;
     rendererReloads += 1;
     setTimeout(() => {
@@ -2939,13 +3233,22 @@ browserPanel.registerIpc(ipcMain);
 // High-frequency payloads use fire-and-forget send() instead of the typed
 // invoke bridge: 16 kHz mono Float32 PCM for live transcription and
 // MediaRecorder chunks for the audio file on disk.
-ipcMain.on("legalwork:audio:pcm", (_event, streamId, buffer) => {
+ipcMain.on("legalwork:audio:pcm", (_event, streamId, buffer, source) => {
   if (typeof streamId !== "string" || !(buffer instanceof ArrayBuffer)) return;
-  recorderService().feedPcm(streamId, buffer);
+  recorderService().feedPcm(streamId, buffer, source);
 });
-ipcMain.on("legalwork:audio:media-chunk", (_event, recordingId, chunk) => {
+ipcMain.on("legalwork:audio:dictation-level", (event, level) => {
+  if (!mainWindow || event.sender !== mainWindow.webContents) return;
+  dictationHud.feedLevel(level);
+});
+ipcMain.on("legalwork:audio:meeting-level", (event, recordingId, level) => {
+  if (!mainWindow || event.sender !== mainWindow.webContents) return;
+  if (meetingMonitor.status().recordingId !== recordingId) return;
+  dictationHud.feedLevel(level);
+});
+ipcMain.on("legalwork:audio:media-chunk", (_event, recordingId, chunk, source) => {
   if (typeof recordingId !== "string" || !(chunk instanceof ArrayBuffer)) return;
-  recorderService().appendMediaChunk(recordingId, chunk);
+  recorderService().appendMediaChunk(recordingId, chunk, source);
 });
 // Overlay ↔ main-window relays. The overlay window has no session client of
 // its own; questions go to the main window's AI and answers stream back.
@@ -2989,26 +3292,34 @@ if (!app.requestSingleInstanceLock()) {
     appAudioTap.stop();
     callOverlay.destroy();
     systemDictation.dispose();
+    launcherService.dispose();
     dictationHud.destroy();
+    meetingMonitor.dispose();
     appTray.destroy();
     powerSessions.releaseAll();
     void Promise.all([disposeRuntimeBeforeQuit(), uiControlServer.stop()]).finally(() => app.quit());
   });
 
   app.on("second-instance", async (_event, argv) => {
+    // Assistant links reach the quick panel; everything else brings the main window back.
+    const links = forwardedDeepLinks(argv);
+    const remaining = await launcherService.handleDeepLinks(links);
+    if (links.length && !remaining.length) return;
     const win = await createMainWindow();
     if (win.isMinimized()) {
       win.restore();
     }
     win.show();
     win.focus();
-    queueDeepLinks(forwardedDeepLinks(argv));
+    queueDeepLinks(remaining);
   });
 
   app.on("open-url", async (event, url) => {
     event.preventDefault();
+    const remaining = await launcherService.handleDeepLinks([url]);
+    if (!remaining.length) return;
     await createMainWindow();
-    queueDeepLinks([url]);
+    queueDeepLinks(remaining);
   });
 
   app.whenReady().then(async () => {
@@ -3131,7 +3442,8 @@ if (!app.requestSingleInstanceLock()) {
     });
     runtimeBootstrapPromise = bootRuntimeForSelectedWorkspace().catch(describeRuntimeBootFailure);
 
-    queueDeepLinks(forwardedDeepLinks(process.argv));
+    await launcherService.initialize().catch((error) => console.warn("[launcher] initialize failed", error));
+    queueDeepLinks(await launcherService.handleDeepLinks(forwardedDeepLinks(process.argv)));
     if (process.platform === "darwin" && !startHiddenPending) {
       try {
         startHiddenPending = app.getLoginItemSettings().wasOpenedAtLogin === true;
@@ -3140,6 +3452,7 @@ if (!app.requestSingleInstanceLock()) {
       }
     }
     await systemDictation.initialize();
+    await meetingMonitor.initialize();
     syncBackgroundPresence();
 
     // Suspend/resume/lock sequencing: stop work immediately on suspend (the
@@ -3151,9 +3464,16 @@ if (!app.requestSingleInstanceLock()) {
     const powerLifecycle = new PowerLifecycle({
       powerMonitor,
       onSuspend: () => {
+        meetingMonitor.reset();
+        pendingMeetingStart = null;
+        if (meetingMonitor.status().state === "starting" && !meetingMonitor.status().recordingId) {
+          meetingMonitor.setRecording({ state: "idle", error: null });
+        }
         recorderService().broadcast({ type: "power-suspend" });
       },
       onResume: async () => {
+        launcherService.refreshAfterResume();
+        void meetingMonitor.poll();
         await systemDictation.refreshAfterResume();
         await recorderService().ensureTranscriberAfterWake();
       },

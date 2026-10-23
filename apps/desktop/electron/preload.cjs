@@ -7,6 +7,8 @@ const NATIVE_MENU_TOGGLE_SIDEBAR_EVENT = "legalwork:native-menu:toggle-sidebar";
 const NATIVE_MENU_CHECK_UPDATES_EVENT = "legalwork:native-menu:check-updates";
 const NATIVE_MENU_ZOOM_EVENT = "legalwork:native-menu:zoom";
 const DESKTOP_NOTIFICATION_CLICK_EVENT = "legalwork:desktop-notification-click";
+const LAUNCHER_EVENT = "legalwork:launcher:event";
+const NAVIGATE_EVENT = "legalwork:navigate";
 
 function normalizePlatform(value) {
   if (value === "darwin" || value === "linux") return value;
@@ -106,6 +108,12 @@ contextBridge.exposeInMainWorld("__LEGALWORK_ELECTRON__", {
     },
   },
   updater: {
+    getPreferences(legacy) {
+      return ipcRenderer.invoke("legalwork:updater:getPreferences", legacy);
+    },
+    setPreferences(patch) {
+      return ipcRenderer.invoke("legalwork:updater:setPreferences", patch);
+    },
     getChannel() {
       return ipcRenderer.invoke("legalwork:updater:getChannel");
     },
@@ -171,12 +179,19 @@ contextBridge.exposeInMainWorld("__LEGALWORK_ELECTRON__", {
   },
   audio: {
     /** Stream 16 kHz mono Float32 PCM to the local transcriber (fire-and-forget). */
-    sendPcm(streamId, buffer) {
-      ipcRenderer.send("legalwork:audio:pcm", streamId, buffer);
+    sendPcm(streamId, buffer, source) {
+      ipcRenderer.send("legalwork:audio:pcm", streamId, buffer, source);
+    },
+    /** Send the live microphone meter independently of transcription batching. */
+    sendDictationLevel(level) {
+      ipcRenderer.send("legalwork:audio:dictation-level", level);
+    },
+    sendMeetingLevel(recordingId, level) {
+      ipcRenderer.send("legalwork:audio:meeting-level", recordingId, level);
     },
     /** Append a MediaRecorder chunk to the recording file on disk. */
-    sendMediaChunk(recordingId, chunk) {
-      ipcRenderer.send("legalwork:audio:media-chunk", recordingId, chunk);
+    sendMediaChunk(recordingId, chunk, source) {
+      ipcRenderer.send("legalwork:audio:media-chunk", recordingId, chunk, source);
     },
     /** Stream an AI answer back to the call overlay. */
     sendAskAnswer(askId, text, done, error) {
@@ -220,6 +235,18 @@ contextBridge.exposeInMainWorld("__LEGALWORK_ELECTRON__", {
     platform: normalizePlatform(process.platform),
     version: process.versions.electron,
   },
+});
+
+// The quick panel hands a route to the main window (expand into Home, open a result).
+ipcRenderer.on(NAVIGATE_EVENT, (_event, route) => {
+  if (typeof window === "undefined" || typeof route !== "string") return;
+  window.dispatchEvent(new CustomEvent(NAVIGATE_EVENT, { detail: route }));
+});
+
+// Launcher invocations, visibility, origin and attention updates pushed by the main process.
+ipcRenderer.on(LAUNCHER_EVENT, (_event, payload) => {
+  if (typeof window === "undefined" || !payload || typeof payload !== "object") return;
+  window.dispatchEvent(new CustomEvent(LAUNCHER_EVENT, { detail: payload }));
 });
 
 ipcRenderer.on(NATIVE_DEEP_LINK_EVENT, (_event, urls) => {

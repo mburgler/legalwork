@@ -34,6 +34,11 @@ function locatePaneDistDir() {
   return candidates.find((dir) => existsSync(path.join(dir, "taskpane.html"))) ?? null;
 }
 
+export function bundledOpencodeSdkDirectory({ isPackaged, resourcesPath, desktopRoot }) {
+  // Development Electron has its own resourcesPath, unrelated to our staged SDK.
+  return path.join(isPackaged ? resourcesPath : path.join(desktopRoot, "resources"), "opencode-sdk");
+}
+
 const DIRECT_RUNTIME = "direct";
 const ORCHESTRATOR_RUNTIME = "legalwork-orchestrator";
 const LEGALWORK_SERVER_PORT_RANGE_START = 48_000;
@@ -591,9 +596,10 @@ function loadUserEnvFile() {
   }
 }
 
-export function createRuntimeManager({ app, desktopRoot, listLocalWorkspacePaths, recorder, onSidecarExit, getApprovalWindow }) {
+export function createRuntimeManager({ app, desktopRoot, listLocalWorkspacePaths, recorder, onSidecarExit, getApprovalWindow, presentApproval, modelDownloadFetch }) {
   const requestHostApproval = createHostApprovalHandler({
     getWindow: getApprovalWindow,
+    presentInPanel: presentApproval,
     showMessageBox: async (window, options) => {
       const { dialog } = await import("electron");
       if (options.signal.aborted || window.isDestroyed()) return { response: 0, checkboxChecked: false };
@@ -1432,6 +1438,8 @@ export function createRuntimeManager({ app, desktopRoot, listLocalWorkspacePaths
     // into EADDRINUSE (see apps/server/src/serve-node.ts), so the bound port
     // below is authoritative.
     const handle = await startEmbeddedServer({
+      modelDownloadFetch,
+      opencodeSdkDirectory: bundledOpencodeSdkDirectory({ isPackaged: app.isPackaged, resourcesPath: process.resourcesPath, desktopRoot }),
       decryptLegacyConnectorSecrets: async (value) => {
         const { safeStorage } = await import("electron");
         return safeStorage.decryptString(Buffer.from(value, "base64"));
