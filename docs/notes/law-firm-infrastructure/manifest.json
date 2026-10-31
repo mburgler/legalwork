@@ -1,0 +1,51 @@
+{
+  "archived_on": "2026-10-31",
+  "plan_content_date": "2026-10-23",
+  "repository": "mburgler/legalwork",
+  "base_commit": "173511635e4df566563e295693d83d15d5b64ee8",
+  "proposal_pr": "https://github.com/eigenweltlabs/legalwork/pull/328",
+  "files": [
+    {
+      "path": "Bericht.md",
+      "sha256": "2cf19a733c7dc01a0e421e54a5a4e4c8f6315da5ed1a9af53d33c40a2c0c0b96",
+      "bytes": 72832,
+      "kind": "preserved_source"
+    },
+    {
+      "path": "Fable-Adversarial-Review.md",
+      "sha256": "64cd9e9dc5b72789b3a4d4293720e220025544b9186433e374977870da35c909",
+      "bytes": 21750,
+      "kind": "preserved_source"
+    },
+    {
+      "path": "README.md",
+      "sha256": "ab10984cd15fe57edb5a7116e199e62228efded265d912388bd818f7965949bc",
+      "bytes": 2947,
+      "kind": "compiled_notes"
+    },
+    {
+      "path": "discussion-notes.md",
+      "sha256": "aa67d0da85941b2c0a09bf71c4875e26402d5fed52de12751b0e817e16e6d845",
+      "bytes": 8514,
+      "kind": "compiled_notes"
+    },
+    {
+      "path": "fable-review-plan-snapshot.md",
+      "sha256": "9cc30ac41fe2915aa2f60e302046202ef730a365c9ff6b8e1791c475cd3201f2",
+      "bytes": 53336,
+      "kind": "preserved_source"
+    },
+    {
+      "path": "github-snapshot.json",
+      "sha256": "3184f83911404e39e0b6a395aa542520719a3339735bb2e2daa5816e8dddfe9f",
+      "bytes": 92608,
+      "kind": "preserved_source"
+    },
+    {
+      "path": "summary.md",
+      "sha256": "1544bebbd26ccf08ab49b2d0139a91db0a44314c5eb975eb76073e6aa9b99338",
+      "bytes": 8312,
+      "kind": "compiled_notes"
+    }
+  ]
+}

@@ -1,0 +1,2534 @@
+{
+  "scope": "200 most recently updated pull requests and all 81 returned upstream branches; focused architecture review",
+  "legalworkHead": "bb77ce7ce2ef0a665ad3f0704a7994b32b54672d",
+  "legalIdeHead": "5e9a97862f7e617e1630648479cfdc42c038bd37",
+  "projectTempleHead": "d5231d9faa221e857f1266a374b7b27f8b5077dd",
+  "pullRequests": [
+    {
+      "number": 322,
+      "title": "Show dashboard folders and files consistently in project explorers",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/322",
+      "state": "open",
+      "mergedAt": null,
+      "head": "codex/dashboard-file-explorer",
+      "headSha": "1cfd9596056cfffe69da06c5bd1e739e0165623b",
+      "base": "dev",
+      "updatedAt": "2026-10-22T17:44:57Z"
+    },
+    {
+      "number": 321,
+      "title": "Show the actual spending limit before trial purchase recovery",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/321",
+      "state": "open",
+      "mergedAt": null,
+      "head": "fix/trial-limit-priority",
+      "headSha": "5fcc0846f6257b4acc9104d06195be770f73216c",
+      "base": "dev",
+      "updatedAt": "2026-10-22T16:25:53Z"
+    },
+    {
+      "number": 312,
+      "title": "Add the local Personal Assistant to LegalWork",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/312",
+      "state": "open",
+      "mergedAt": null,
+      "head": "codex/johannes-assistant",
+      "headSha": "553bf94aa6e8575b2324e04187e39b64845f68b2",
+      "base": "dev",
+      "updatedAt": "2026-10-22T16:00:58Z"
+    },
+    {
+      "number": 320,
+      "title": "Fix project recording with cloud transcription selected",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/320",
+      "state": "closed",
+      "mergedAt": "2026-10-22T15:04:18Z",
+      "head": "codex/project-cloud-recording",
+      "headSha": "cf6ad8861dc41cbffb068e7a001c9d4ff1732c2f",
+      "base": "dev",
+      "updatedAt": "2026-10-22T15:04:20Z"
+    },
+    {
+      "number": 319,
+      "title": "Add three update channels and automatic dev alphas",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/319",
+      "state": "closed",
+      "mergedAt": "2026-10-22T10:24:19Z",
+      "head": "feat/three-release-channels",
+      "headSha": "d5699181b9d5aefa0d8e16d5007385b6c42b5cf0",
+      "base": "dev",
+      "updatedAt": "2026-10-22T10:24:21Z"
+    },
+    {
+      "number": 317,
+      "title": "Fix stale cloud transcription availability warnings",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/317",
+      "state": "closed",
+      "mergedAt": "2026-10-22T08:18:55Z",
+      "head": "codex/recorder-cloud-warning-recovery",
+      "headSha": "9a97fa0e4cfe402acc7388fdd7ba447f01789de6",
+      "base": "dev",
+      "updatedAt": "2026-10-22T08:18:58Z"
+    },
+    {
+      "number": 318,
+      "title": "Fix Python installer certificate trust and virtualenv seeds",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/318",
+      "state": "closed",
+      "mergedAt": "2026-10-22T07:52:58Z",
+      "head": "fix/python-installer-ca-security",
+      "headSha": "8e9a892f3d99c1adc1387c5643065caff07b6bcf",
+      "base": "dev",
+      "updatedAt": "2026-10-22T07:52:59Z"
+    },
+    {
+      "number": 316,
+      "title": "Patch October security issues and macOS notarization reliability",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/316",
+      "state": "closed",
+      "mergedAt": "2026-10-22T06:29:09Z",
+      "head": "fix/october-2026-runtime-security",
+      "headSha": "f13c2cf5da4fcd60dd7fa3e47a58356f5142dce1",
+      "base": "dev",
+      "updatedAt": "2026-10-22T06:29:10Z"
+    },
+    {
+      "number": 315,
+      "title": "Retry Apple ticket service failures during macOS release signing",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/315",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "fix/macos-notary-network-retry",
+      "headSha": "c4a05076dbdc4fa1278cd1bfc6064b6e43d96097",
+      "base": "dev",
+      "updatedAt": "2026-10-22T06:22:10Z"
+    },
+    {
+      "number": 299,
+      "title": "Improve dictation and meeting recording with live tabs and cloud models",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/299",
+      "state": "closed",
+      "mergedAt": "2026-10-21T19:49:28Z",
+      "head": "codex/dictation-flow-ux",
+      "headSha": "b6a046e9aacb86b6d006f866fae0fca75ebcbf48",
+      "base": "dev",
+      "updatedAt": "2026-10-21T19:49:31Z"
+    },
+    {
+      "number": 303,
+      "title": "Own remote MCP OAuth in LegalWork through a local gateway",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/303",
+      "state": "open",
+      "mergedAt": null,
+      "head": "codex/connector-manager",
+      "headSha": "b2361215cde61a939837f10dfd0e77364ec72aa4",
+      "base": "dev",
+      "updatedAt": "2026-10-21T15:43:53Z"
+    },
+    {
+      "number": 229,
+      "title": "Add Gmail and Outlook agent plugins with native send approval",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/229",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "feat/mail-plugins",
+      "headSha": "c3a6ffb91b089efdd2c48c4737239bc60470736d",
+      "base": "dev",
+      "updatedAt": "2026-10-21T14:26:19Z"
+    },
+    {
+      "number": 139,
+      "title": "Add OneDrive and SharePoint file storage",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/139",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "feat/storage-oauth-microsoft",
+      "headSha": "bd93b2c0ab58ff3a56d3bf1fc23d8fb619568ea5",
+      "base": "dev",
+      "updatedAt": "2026-10-21T14:26:19Z"
+    },
+    {
+      "number": 138,
+      "title": "Add Google Drive file storage",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/138",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "feat/storage-oauth-google-drive",
+      "headSha": "dd99928ddb07d72eb66e88bd06f0ec35fd6b79ba",
+      "base": "dev",
+      "updatedAt": "2026-10-21T14:26:18Z"
+    },
+    {
+      "number": 314,
+      "title": "Keep pending permissions visible in the sidebar (LW-202)",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/314",
+      "state": "closed",
+      "mergedAt": "2026-10-21T08:04:38Z",
+      "head": "worktree-lw-202-sidebar-status",
+      "headSha": "7517fc11d63147a67ee3109a9c13fa2fec4b2d6e",
+      "base": "dev",
+      "updatedAt": "2026-10-21T08:04:41Z"
+    },
+    {
+      "number": 313,
+      "title": "Fix documented plugin formats and unify workflow imports",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/313",
+      "state": "open",
+      "mergedAt": null,
+      "head": "codex/import-format-compatibility",
+      "headSha": "60425808a597a670a8c68062b4d4682d98716333",
+      "base": "dev",
+      "updatedAt": "2026-10-20T15:30:13Z"
+    },
+    {
+      "number": 294,
+      "title": "Fix Actaport upload limit and record API compatibility verification",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/294",
+      "state": "closed",
+      "mergedAt": "2026-10-20T11:53:20Z",
+      "head": "codex/actaport-api-verification",
+      "headSha": "b04ef193dabaff85c91d651c5020686152743961",
+      "base": "dev",
+      "updatedAt": "2026-10-20T11:53:22Z"
+    },
+    {
+      "number": 308,
+      "title": "Share Google and Microsoft storage using member or team accounts",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/308",
+      "state": "closed",
+      "mergedAt": "2026-10-20T09:05:53Z",
+      "head": "codex/team-cloud-storage",
+      "headSha": "c5f28abc41b2cfc1fd7fb3a648a0a4c1736bae56",
+      "base": "dev",
+      "updatedAt": "2026-10-20T09:05:56Z"
+    },
+    {
+      "number": 298,
+      "title": "fix: disable FFF background scans in managed OpenCode engines",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/298",
+      "state": "closed",
+      "mergedAt": "2026-10-20T07:43:48Z",
+      "head": "codex/disable-fff-background-reads",
+      "headSha": "bbf18319ae33129cf7f8930a204299c946ca058d",
+      "base": "dev",
+      "updatedAt": "2026-10-20T07:43:50Z"
+    },
+    {
+      "number": 311,
+      "title": "Fix alpha SDK packaging, macOS updates, and streaming recovery",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/311",
+      "state": "closed",
+      "mergedAt": "2026-10-19T21:14:27Z",
+      "head": "codex/macos-update-readiness",
+      "headSha": "4bb73bb4a5f14e633a72ef894537f948cdfe2e1a",
+      "base": "dev",
+      "updatedAt": "2026-10-19T21:14:28Z"
+    },
+    {
+      "number": 297,
+      "title": "Show monthly allowances and one-euro trial checkout and recovery",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/297",
+      "state": "closed",
+      "mergedAt": "2026-10-19T20:12:10Z",
+      "head": "codex/monthly-usage-limits",
+      "headSha": "a51ed70e631180dfc0e11bd0fec3c123e933b00f",
+      "base": "dev",
+      "updatedAt": "2026-10-19T20:12:12Z"
+    },
+    {
+      "number": 310,
+      "title": "Keep local project sync working with broken provider settings",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/310",
+      "state": "closed",
+      "mergedAt": "2026-10-19T19:49:20Z",
+      "head": "codex/cloud-folder-detection-isolation",
+      "headSha": "7399ecd537b66509259c394d85b3cbd964088cf7",
+      "base": "dev",
+      "updatedAt": "2026-10-19T19:49:23Z"
+    },
+    {
+      "number": 309,
+      "title": "Disable document sharing for cloud-backed local projects",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/309",
+      "state": "closed",
+      "mergedAt": "2026-10-19T19:14:18Z",
+      "head": "codex/onedrive-startup-investigation",
+      "headSha": "f9694c93e50f808dc49a9e83754e6f92d9a38a32",
+      "base": "dev",
+      "updatedAt": "2026-10-19T19:17:28Z"
+    },
+    {
+      "number": 307,
+      "title": "Fix offline settings, bundled dependencies, and MCP consent",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/307",
+      "state": "closed",
+      "mergedAt": "2026-10-19T17:54:37Z",
+      "head": "codex/michael-feedback-v0210",
+      "headSha": "b49284c8bf7fcadd5267d40240fce89ff230019c",
+      "base": "dev",
+      "updatedAt": "2026-10-19T17:54:38Z"
+    },
+    {
+      "number": 304,
+      "title": "Unify plugin imports with requirements, updates and restore",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/304",
+      "state": "closed",
+      "mergedAt": "2026-10-19T17:46:33Z",
+      "head": "codex/portable-import-lifecycle",
+      "headSha": "9c1a9b8ba5d10ebf78c268d4c800e3ebfa26b05f",
+      "base": "dev",
+      "updatedAt": "2026-10-19T17:46:34Z"
+    },
+    {
+      "number": 306,
+      "title": "Unify integration plugins and simplify custom MCP setup",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/306",
+      "state": "closed",
+      "mergedAt": "2026-10-19T16:37:46Z",
+      "head": "fix/integrations-catalogue-custom",
+      "headSha": "d80271f4aa6e7b0b242c013536ef0c6ea63f83cc",
+      "base": "dev",
+      "updatedAt": "2026-10-19T16:37:48Z"
+    },
+    {
+      "number": 285,
+      "title": "Open work: investigate connector refresh and session Stop isolation",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/285",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/connector-runtime-investigation",
+      "headSha": "fcf9605c404e5ecb16a500709c613504855fff21",
+      "base": "dev",
+      "updatedAt": "2026-10-19T16:06:43Z"
+    },
+    {
+      "number": 172,
+      "title": "Import GitHub skills without re-fetching the file list, retry dropped connections",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/172",
+      "state": "closed",
+      "mergedAt": "2026-09-23T16:05:45Z",
+      "head": "johann/eig-200-github-import-network",
+      "headSha": "684d839f2b14882451df67f351e8f60d21f502c2",
+      "base": "dev",
+      "updatedAt": "2026-10-19T12:09:35Z"
+    },
+    {
+      "number": 171,
+      "title": "Log app window failures, slow requests and big GitHub scans for support",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/171",
+      "state": "closed",
+      "mergedAt": "2026-09-23T15:06:50Z",
+      "head": "johann/eig-200-window-logs",
+      "headSha": "c3623b87879296199e6e558615eb594f42680aa4",
+      "base": "dev",
+      "updatedAt": "2026-10-19T12:09:33Z"
+    },
+    {
+      "number": 174,
+      "title": "Constrain Tasks and Workflows list width and improve spacing",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/174",
+      "state": "closed",
+      "mergedAt": "2026-09-23T17:28:39Z",
+      "head": "codex/constrain-task-workflow-width",
+      "headSha": "e80515a2c9187518df17e81fd6fd06ed5c4abf51",
+      "base": "dev",
+      "updatedAt": "2026-10-19T12:09:31Z"
+    },
+    {
+      "number": 173,
+      "title": "Add Vaquill to the connector catalog",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/173",
+      "state": "closed",
+      "mergedAt": "2026-10-11T11:02:08Z",
+      "head": "claude/vaquill-legalwork-connector-794a95",
+      "headSha": "96db2d9e3ceb1de9660c6a03976c05b079bee984",
+      "base": "dev",
+      "updatedAt": "2026-10-19T12:09:29Z"
+    },
+    {
+      "number": 170,
+      "title": "Harden the desktop app's trust boundaries",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/170",
+      "state": "closed",
+      "mergedAt": "2026-09-23T16:59:01Z",
+      "head": "claude/legalwork-security-review-27e054",
+      "headSha": "e214a56c509ce9aff8aa9fe033c629d4e9b3b5aa",
+      "base": "dev",
+      "updatedAt": "2026-10-19T12:09:27Z"
+    },
+    {
+      "number": 301,
+      "title": "Fix task widgets to open full task details in a modal",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/301",
+      "state": "closed",
+      "mergedAt": "2026-10-19T12:03:00Z",
+      "head": "fix/task-widget-modal",
+      "headSha": "8f72bf82ffb10b4e86983e71a9a85e6bd347a79f",
+      "base": "dev",
+      "updatedAt": "2026-10-19T12:03:03Z"
+    },
+    {
+      "number": 302,
+      "title": "Remove redundant macOS document fullscreen exit button",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/302",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "fix/remove-centered-fullscreen-button",
+      "headSha": "734e651d2f840fc8e4be53bb703124ec8b8fbcc6",
+      "base": "dev",
+      "updatedAt": "2026-10-19T09:43:59Z"
+    },
+    {
+      "number": 232,
+      "title": "Add personal assistant with private cloud sync and mobile execution",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/232",
+      "state": "open",
+      "mergedAt": null,
+      "head": "codex/legalwork-cloud-sync",
+      "headSha": "aee752e8a34c147286fb1c2d4acee4488ff5eb4d",
+      "base": "dev",
+      "updatedAt": "2026-10-19T07:54:45Z"
+    },
+    {
+      "number": 300,
+      "title": "Fix Markdown fullscreen exit on Windows",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/300",
+      "state": "closed",
+      "mergedAt": "2026-10-19T06:34:49Z",
+      "head": "fix/markdown-fullscreen-exit",
+      "headSha": "a09c5ed51ac98d71a9bf89a52e185b98f7ad2755",
+      "base": "dev",
+      "updatedAt": "2026-10-19T06:34:50Z"
+    },
+    {
+      "number": 293,
+      "title": "Fix connector recovery and setup, shared skill access, and document positioning",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/293",
+      "state": "closed",
+      "mergedAt": "2026-10-16T22:27:59Z",
+      "head": "codex/fix-sandbox-shared-skills",
+      "headSha": "04fa0dadae623cf2b3c1a27ca2f57b3f2c2ef979",
+      "base": "dev",
+      "updatedAt": "2026-10-16T22:28:02Z"
+    },
+    {
+      "number": 296,
+      "title": "Fix personal connector authorization after action normalization",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/296",
+      "state": "closed",
+      "mergedAt": "2026-10-16T22:10:37Z",
+      "head": "fix/connector-authorization",
+      "headSha": "80b89b4d22205774e52925ac757616a694cddb6f",
+      "base": "dev",
+      "updatedAt": "2026-10-16T22:10:39Z"
+    },
+    {
+      "number": 295,
+      "title": "Fix unused optional arguments in document opening and Word reads",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/295",
+      "state": "closed",
+      "mergedAt": "2026-10-15T21:55:30Z",
+      "head": "fix/docx-tool-parameters",
+      "headSha": "eca7b201cbc9584a916feefc94596d9daa61a31f",
+      "base": "dev",
+      "updatedAt": "2026-10-15T21:55:32Z"
+    },
+    {
+      "number": 292,
+      "title": "Recover remote MCP tools after network interruptions",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/292",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/fix-mcp-network-recovery",
+      "headSha": "b619576ffae4b05e4f78d115ef30ae8a7b50fff3",
+      "base": "dev",
+      "updatedAt": "2026-10-15T14:04:21Z"
+    },
+    {
+      "number": 291,
+      "title": "Make review cancellation test deterministic",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/291",
+      "state": "closed",
+      "mergedAt": "2026-10-15T11:03:29Z",
+      "head": "codex/fix-review-cancellation-test",
+      "headSha": "21ccc56312f653932d7a2924b20e4068d429f2ab",
+      "base": "dev",
+      "updatedAt": "2026-10-15T11:03:30Z"
+    },
+    {
+      "number": 290,
+      "title": "Run Intel macOS release checks on a native Intel runner",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/290",
+      "state": "closed",
+      "mergedAt": "2026-10-15T10:11:29Z",
+      "head": "codex/macos-intel-release-runner",
+      "headSha": "b32ed6aa4d03f909be40caa7e632e3ca29f45f2b",
+      "base": "dev",
+      "updatedAt": "2026-10-15T10:11:30Z"
+    },
+    {
+      "number": 289,
+      "title": "Verify production desktop startup before publishing",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/289",
+      "state": "closed",
+      "mergedAt": "2026-10-15T08:55:24Z",
+      "head": "codex/production-startup-gate",
+      "headSha": "166da305c736138942cb015c8ce2d2b1bb10305d",
+      "base": "dev",
+      "updatedAt": "2026-10-15T08:55:25Z"
+    },
+    {
+      "number": 288,
+      "title": "Fix Windows paths in packaged server import check",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/288",
+      "state": "closed",
+      "mergedAt": "2026-10-15T08:44:11Z",
+      "head": "codex/fix-windows-archive-check",
+      "headSha": "30db9e83ba1f6e731733c34a07efef90247eb627",
+      "base": "dev",
+      "updatedAt": "2026-10-15T08:44:12Z"
+    },
+    {
+      "number": 287,
+      "title": "Fix packaged app startup after review recovery change",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/287",
+      "state": "closed",
+      "mergedAt": "2026-10-15T07:47:01Z",
+      "head": "codex/fix-packaged-review-recovery",
+      "headSha": "11739e4cf9fdec9e05c215df2833b5e1ca5d9cda",
+      "base": "dev",
+      "updatedAt": "2026-10-15T07:47:02Z"
+    },
+    {
+      "number": 286,
+      "title": "Remove Dashboards from the project sidebar",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/286",
+      "state": "closed",
+      "mergedAt": "2026-10-15T06:54:41Z",
+      "head": "codex/remove-project-dashboards",
+      "headSha": "bd9dfb8ce56a506f5edda1ddd840e71eff991370",
+      "base": "dev",
+      "updatedAt": "2026-10-15T06:54:43Z"
+    },
+    {
+      "number": 284,
+      "title": "Add Patent Connector, saved-output retrieval, and approval retention",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/284",
+      "state": "closed",
+      "mergedAt": "2026-10-15T06:41:24Z",
+      "head": "codex/connector-runtime-fixes",
+      "headSha": "92e74e803d0e52304843c53de096dcbc65186a7d",
+      "base": "dev",
+      "updatedAt": "2026-10-15T06:41:26Z"
+    },
+    {
+      "number": 283,
+      "title": "Combine wiki reviews, project access and dashboard lifecycle fixes",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/283",
+      "state": "closed",
+      "mergedAt": "2026-10-15T05:36:54Z",
+      "head": "codex/wiki-dashboard-combined",
+      "headSha": "2b8e02b60aaf9281daf44f267beed3eb49cb3aff",
+      "base": "dev",
+      "updatedAt": "2026-10-15T05:37:19Z"
+    },
+    {
+      "number": 276,
+      "title": "Fix wiki chat discoverability and page rendering",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/276",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/wiki-chat-editor-fixes",
+      "headSha": "83ae38d1e73a10734edad208d0be77dd3d655dad",
+      "base": "dev",
+      "updatedAt": "2026-10-15T05:31:09Z"
+    },
+    {
+      "number": 280,
+      "title": "Improve wiki reviews, project access and dashboard lifecycle",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/280",
+      "state": "closed",
+      "mergedAt": "2026-10-15T05:22:51Z",
+      "head": "codex/mburgler-wiki-genui",
+      "headSha": "4e9510b2d1f20c67ed39c8cd0870e2e7ad7e59c9",
+      "base": "codex/wiki-chat-editor-fixes",
+      "updatedAt": "2026-10-15T05:22:51Z"
+    },
+    {
+      "number": 282,
+      "title": "Support native Word workflows and focused agent editing tools",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/282",
+      "state": "closed",
+      "mergedAt": "2026-10-14T22:38:59Z",
+      "head": "feat/word-editor-agent",
+      "headSha": "f009901ab49db6301413f1b6263b5dec87e8f445",
+      "base": "dev",
+      "updatedAt": "2026-10-14T22:39:01Z"
+    },
+    {
+      "number": 281,
+      "title": "Fix skill tools under wiki agent auth and let the agent show files and tabs on request",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/281",
+      "state": "closed",
+      "mergedAt": "2026-10-14T21:10:43Z",
+      "head": "claude/vertrag-anlegen-debug-0953c7",
+      "headSha": "1a07e6c0240190a790776eb483f74fa0196ebfb9",
+      "base": "dev",
+      "updatedAt": "2026-10-14T21:10:45Z"
+    },
+    {
+      "number": 277,
+      "title": "Restore Google Drive shared files and check connector compatibility before import",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/277",
+      "state": "closed",
+      "mergedAt": "2026-10-14T21:00:43Z",
+      "head": "claude/hopeful-ritchie-1dcbx5",
+      "headSha": "7dc5454abdfd891d3bc360667bb599a193875cd4",
+      "base": "dev",
+      "updatedAt": "2026-10-14T21:00:45Z"
+    },
+    {
+      "number": 279,
+      "title": "Fix packaged app startup crash from opencode-plugins import",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/279",
+      "state": "closed",
+      "mergedAt": "2026-10-14T18:25:30Z",
+      "head": "claude/alpha-mac-startup-issue-26e353",
+      "headSha": "b4092aa7ad2daeeaa4d21ac60cfe34d23732fb42",
+      "base": "dev",
+      "updatedAt": "2026-10-14T18:25:31Z"
+    },
+    {
+      "number": 278,
+      "title": "Fix Actaport MCP bundle names on Windows",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/278",
+      "state": "closed",
+      "mergedAt": "2026-10-14T18:00:05Z",
+      "head": "claude/actaport-windows-entry-naming",
+      "headSha": "110e6180af631941c2918ac58346db64973a207f",
+      "base": "dev",
+      "updatedAt": "2026-10-14T18:00:08Z"
+    },
+    {
+      "number": 275,
+      "title": "Check connector compatibility before importing ChatGPT and Claude setups",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/275",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "fix/connector-import-compatibility",
+      "headSha": "99f630cc0bce683fe62f55371cb7b71cf84f81e4",
+      "base": "dev",
+      "updatedAt": "2026-10-14T17:25:47Z"
+    },
+    {
+      "number": 273,
+      "title": "Restore Google Drive shared files and company-drive search",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/273",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/google-drive-shared-access",
+      "headSha": "637f730ee9c0806b24132edc6ee229f6728e7be6",
+      "base": "dev",
+      "updatedAt": "2026-10-14T17:25:44Z"
+    },
+    {
+      "number": 274,
+      "title": "Integrate wikis, background tabs, Actaport and Open Computer Use",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/274",
+      "state": "closed",
+      "mergedAt": "2026-10-14T17:09:31Z",
+      "head": "codex/integrate-246-253-269-270",
+      "headSha": "1acae6847e3a44ec31c9c3011a4f48fa7c5a2e77",
+      "base": "dev",
+      "updatedAt": "2026-10-14T17:09:35Z"
+    },
+    {
+      "number": 238,
+      "title": "Import ChatGPT and Claude setups and redesign integration libraries",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/238",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "feat/chatgpt-claude-plugin-import",
+      "headSha": "10e07075c10a5be7a6cde2276a4bedb771480151",
+      "base": "dev",
+      "updatedAt": "2026-10-14T16:42:37Z"
+    },
+    {
+      "number": 270,
+      "title": "Replace Computer Use with Open Computer Use for Mac and Windows",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/270",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/open-computer-use-integration",
+      "headSha": "be39def483e59170097c660c02ee93115f0694ce",
+      "base": "dev",
+      "updatedAt": "2026-10-14T16:39:36Z"
+    },
+    {
+      "number": 269,
+      "title": "Add bundled Actaport MCP integration with optional tool groups",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/269",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/actaport-mcp",
+      "headSha": "76f3ff707574d4f052b35837be66c6a19e742b08",
+      "base": "dev",
+      "updatedAt": "2026-10-14T16:39:33Z"
+    },
+    {
+      "number": 253,
+      "title": "Add per-chat background tabs and streaming document previews",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/253",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/background-document-work",
+      "headSha": "64297e6d581d6b226465be3d4c028a423e60a655",
+      "base": "dev",
+      "updatedAt": "2026-10-14T16:39:30Z"
+    },
+    {
+      "number": 246,
+      "title": "Add wiki workspaces, editable files, interactive graph and OpenUI views",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/246",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/markdown-wiki",
+      "headSha": "1460206047d5c75418eb153c66627bcec5fdbf2e",
+      "base": "dev",
+      "updatedAt": "2026-10-14T16:39:25Z"
+    },
+    {
+      "number": 272,
+      "title": "Add native Google and Microsoft connectors with credential-only Nango auth",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/272",
+      "state": "closed",
+      "mergedAt": "2026-10-14T16:11:54Z",
+      "head": "codex/nango-connectors",
+      "headSha": "64bc026b36ece6c69033654629e7709e061526ff",
+      "base": "dev",
+      "updatedAt": "2026-10-14T16:11:57Z"
+    },
+    {
+      "number": 265,
+      "title": "Calendar, email and doc navigation",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/265",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/email-calendar-drafts",
+      "headSha": "ce61762854d0e3710a8571d846d90fba38f0b725",
+      "base": "dev",
+      "updatedAt": "2026-10-14T16:06:02Z"
+    },
+    {
+      "number": 271,
+      "title": "Use catalog model names in the composer and preserve renamed model selections",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/271",
+      "state": "closed",
+      "mergedAt": "2026-10-14T10:35:39Z",
+      "head": "codex/gemini4-model-names",
+      "headSha": "78a0935d70ea90d862db08fb2e4bc6b10bb659c7",
+      "base": "dev",
+      "updatedAt": "2026-10-14T10:35:43Z"
+    },
+    {
+      "number": 268,
+      "title": "Add editable project metadata templates and a Shared Projects sidebar",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/268",
+      "state": "closed",
+      "mergedAt": "2026-10-14T08:36:24Z",
+      "head": "codex/project-metadata-templates",
+      "headSha": "97e523314cc604090b6e3c13d6521e73be4c1398",
+      "base": "dev",
+      "updatedAt": "2026-10-14T08:36:26Z"
+    },
+    {
+      "number": 267,
+      "title": "Fix workflow workspace tabs, scrolling, and attachment loading",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/267",
+      "state": "closed",
+      "mergedAt": "2026-10-13T17:54:21Z",
+      "head": "codex/workflow-workspace-tabs",
+      "headSha": "a1c1a7a82f62108cfff7b32f0c6f1da88f9ee2a3",
+      "base": "dev",
+      "updatedAt": "2026-10-13T17:54:22Z"
+    },
+    {
+      "number": 266,
+      "title": "Hide empty paused queue banner after Stop",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/266",
+      "state": "closed",
+      "mergedAt": "2026-10-13T09:36:53Z",
+      "head": "fix/hide-empty-paused-queue",
+      "headSha": "cc4b52db8bf20c273af690777b0cdf8ff9839321",
+      "base": "dev",
+      "updatedAt": "2026-10-13T09:36:56Z"
+    },
+    {
+      "number": 264,
+      "title": "Fix chat action spacing and horizontal code scrolling",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/264",
+      "state": "closed",
+      "mergedAt": "2026-10-13T09:10:05Z",
+      "head": "codex/chat-scroll-action-spacing",
+      "headSha": "061b3faedcecb2798fb338941211b31025918b02",
+      "base": "dev",
+      "updatedAt": "2026-10-13T09:10:07Z"
+    },
+    {
+      "number": 263,
+      "title": "Fix Windows sandbox test file handle cleanup",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/263",
+      "state": "closed",
+      "mergedAt": "2026-10-13T08:37:58Z",
+      "head": "fix/windows-sandbox-file-test",
+      "headSha": "b5eda4c848b662375ccb94b789c4a3fa11fcf359",
+      "base": "dev",
+      "updatedAt": "2026-10-13T08:38:01Z"
+    },
+    {
+      "number": 262,
+      "title": "Keep concise review findings in chat",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/262",
+      "state": "closed",
+      "mergedAt": "2026-10-13T07:57:52Z",
+      "head": "codex/report-findings-scope",
+      "headSha": "b42d0be6292f8dc567fc97434662002ee1a7f899",
+      "base": "dev",
+      "updatedAt": "2026-10-13T07:57:54Z"
+    },
+    {
+      "number": 259,
+      "title": "Guard prompt caching across the full agent runtime",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/259",
+      "state": "closed",
+      "mergedAt": "2026-10-13T07:17:40Z",
+      "head": "test/full-agent-prompt-cache",
+      "headSha": "f30908711fa7c71b7221e983ac170453d70cf0fd",
+      "base": "dev",
+      "updatedAt": "2026-10-13T07:17:42Z"
+    },
+    {
+      "number": 260,
+      "title": "Fix document previews for filenames containing # and ?",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/260",
+      "state": "closed",
+      "mergedAt": "2026-10-13T06:58:17Z",
+      "head": "codex/fix-literal-filename-preview",
+      "headSha": "6a43c99618236580c718dac0f4414da5ee52788d",
+      "base": "dev",
+      "updatedAt": "2026-10-13T06:58:20Z"
+    },
+    {
+      "number": 258,
+      "title": "Disable browser tools under sandbox Approve and Off network modes",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/258",
+      "state": "closed",
+      "mergedAt": "2026-10-12T11:26:16Z",
+      "head": "codex/sandbox-browser-network-policy",
+      "headSha": "0e21d2bdb37bd6809eeb3622049b1ac1625c2845",
+      "base": "dev",
+      "updatedAt": "2026-10-12T11:26:19Z"
+    },
+    {
+      "number": 257,
+      "title": "Keep release publishing working after branch deletion",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/257",
+      "state": "closed",
+      "mergedAt": "2026-10-12T11:04:52Z",
+      "head": "codex/release-pin-publisher-commit",
+      "headSha": "758af8495c04ed3bb8d38f92a78dede3a8d84fc8",
+      "base": "dev",
+      "updatedAt": "2026-10-12T11:04:55Z"
+    },
+    {
+      "number": 255,
+      "title": "Skip sandbox tests in production release builds",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/255",
+      "state": "closed",
+      "mergedAt": "2026-10-12T10:00:17Z",
+      "head": "codex/release-skip-sandbox-tests",
+      "headSha": "39262eb7a6c1f30f49d4a04839d8cc342d5ac4da",
+      "base": "dev",
+      "updatedAt": "2026-10-12T11:00:55Z"
+    },
+    {
+      "number": 256,
+      "title": "Improve selected text visibility in chats",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/256",
+      "state": "closed",
+      "mergedAt": "2026-10-12T10:15:40Z",
+      "head": "fix/chat-selection-contrast",
+      "headSha": "34fa352dc333e4f11319e7398b5d414b730ca4d0",
+      "base": "dev",
+      "updatedAt": "2026-10-12T10:15:41Z"
+    },
+    {
+      "number": 254,
+      "title": "Fix sandbox access to project files and copied attachments",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/254",
+      "state": "closed",
+      "mergedAt": "2026-10-12T09:46:51Z",
+      "head": "codex/attachment-sandbox-access",
+      "headSha": "e37c7ba03a9084d873c357bcbf3cc047d819bb7f",
+      "base": "dev",
+      "updatedAt": "2026-10-12T09:46:53Z"
+    },
+    {
+      "number": 252,
+      "title": "Fix tabular review worker chats and malformed cell responses",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/252",
+      "state": "closed",
+      "mergedAt": "2026-10-12T08:23:58Z",
+      "head": "codex/tab-review-background-workers",
+      "headSha": "4ac3ef1862773296436b80c9f603a26c684369b8",
+      "base": "dev",
+      "updatedAt": "2026-10-12T08:24:00Z"
+    },
+    {
+      "number": 249,
+      "title": "Keep scheduling clocks out of the cached system prompt",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/249",
+      "state": "closed",
+      "mergedAt": "2026-10-12T07:35:19Z",
+      "head": "fix/scheduled-task-prompt-cache",
+      "headSha": "32e7a86785f32c4892886a6e8d2480b24e31f237",
+      "base": "dev",
+      "updatedAt": "2026-10-12T07:35:22Z"
+    },
+    {
+      "number": 250,
+      "title": "Fix LLM Tabreview worker registration in managed engine",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/250",
+      "state": "closed",
+      "mergedAt": "2026-10-11T20:38:24Z",
+      "head": "fix/tabreview-runtime-agent",
+      "headSha": "e6237b512b9bf02506ba63cfcab0e9ebf71fc3b0",
+      "base": "dev",
+      "updatedAt": "2026-10-11T20:38:27Z"
+    },
+    {
+      "number": 251,
+      "title": "Fix document review, project permissions, and chat reliability",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/251",
+      "state": "closed",
+      "mergedAt": "2026-10-11T20:31:29Z",
+      "head": "codex/review-session-fixes-20261011",
+      "headSha": "e65065fa2a8519bce103f6bd94a6afcb058594f8",
+      "base": "dev",
+      "updatedAt": "2026-10-11T20:31:32Z"
+    },
+    {
+      "number": 247,
+      "title": "Prepare protected runtime before macOS alpha packaging",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/247",
+      "state": "closed",
+      "mergedAt": "2026-10-11T16:21:04Z",
+      "head": "fix/macos-alpha-runtime",
+      "headSha": "cef7cfbabc13f935de8b203116eb57a93b1454fe",
+      "base": "dev",
+      "updatedAt": "2026-10-11T16:21:07Z"
+    },
+    {
+      "number": 248,
+      "title": "Make sandbox tests opt in for Windows and macOS Alpha builds",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/248",
+      "state": "closed",
+      "mergedAt": "2026-10-11T16:13:57Z",
+      "head": "codex/alpha-sandbox-opt-in",
+      "headSha": "8899a67f61f8aa5ca36374a63453d736cabdc839",
+      "base": "dev",
+      "updatedAt": "2026-10-11T16:13:59Z"
+    },
+    {
+      "number": 245,
+      "title": "Add bundled code editor and default-on Markdown/text autosave",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/245",
+      "state": "closed",
+      "mergedAt": "2026-10-11T14:07:11Z",
+      "head": "codex/code-file-editor",
+      "headSha": "a93af2d8e876465889a79f1e80442bc357c4cdd6",
+      "base": "dev",
+      "updatedAt": "2026-10-11T14:07:14Z"
+    },
+    {
+      "number": 234,
+      "title": "Improve AI recovery, subagent UI, and desktop behavior",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/234",
+      "state": "closed",
+      "mergedAt": "2026-10-11T13:59:34Z",
+      "head": "codex/subscription-expiry-recovery",
+      "headSha": "cc90aead7084fa36de1d66635149f82ea9799de8",
+      "base": "dev",
+      "updatedAt": "2026-10-11T13:59:35Z"
+    },
+    {
+      "number": 243,
+      "title": "Show subagents as minimal clickable rows in chat",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/243",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "fix/subagent-chat-list",
+      "headSha": "0a618ef3410e1268ddee853dba6284d441a58d71",
+      "base": "dev",
+      "updatedAt": "2026-10-11T13:34:54Z"
+    },
+    {
+      "number": 244,
+      "title": "Fix file menu positioning and compatible app suggestions",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/244",
+      "state": "closed",
+      "mergedAt": "2026-10-11T13:34:46Z",
+      "head": "fix/file-menu-position-and-apps",
+      "headSha": "faaf4f12c7c2202a9bc94b1e7dab74f0baa42ce3",
+      "base": "dev",
+      "updatedAt": "2026-10-11T13:34:48Z"
+    },
+    {
+      "number": 242,
+      "title": "Fix workflow resource access and limit expensive sandbox CI",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/242",
+      "state": "closed",
+      "mergedAt": "2026-10-11T13:20:27Z",
+      "head": "fix/workflow-resources-and-sandbox-ci",
+      "headSha": "6b48bf6774330368aa8a6f4db4a9ea512dfc5ae1",
+      "base": "dev",
+      "updatedAt": "2026-10-11T13:20:28Z"
+    },
+    {
+      "number": 227,
+      "title": "Add optional sandboxing with chat, network and firm controls",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/227",
+      "state": "closed",
+      "mergedAt": "2026-10-11T12:07:02Z",
+      "head": "feat/native-agent-sandbox",
+      "headSha": "b1847a90c708abee3332e6b0145690a47cd3e381",
+      "base": "dev",
+      "updatedAt": "2026-10-11T12:07:04Z"
+    },
+    {
+      "number": 236,
+      "title": "Fix duplicate Account sign-in and Windows sidebar alignment",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/236",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/account-windows-sidebar",
+      "headSha": "a36be929f4a72574fe2e263c51c651d769e3b46c",
+      "base": "dev",
+      "updatedAt": "2026-10-11T11:46:52Z"
+    },
+    {
+      "number": 241,
+      "title": "Persist skipped-skill warnings across app reloads",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/241",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/persist-skipped-skill-alerts",
+      "headSha": "7f796f67d9ea4eebed66e01dd2d345a2380fc645",
+      "base": "dev",
+      "updatedAt": "2026-10-11T11:42:45Z"
+    },
+    {
+      "number": 240,
+      "title": "Show the spending boundary that blocks an AI request",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/240",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "fix/request-budget-reason",
+      "headSha": "104322f5db905d6e620783ba994fbcfffeb35494",
+      "base": "dev",
+      "updatedAt": "2026-10-11T11:42:39Z"
+    },
+    {
+      "number": 237,
+      "title": "Keep chat messages selectable and copyable between runs",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/237",
+      "state": "closed",
+      "mergedAt": "2026-10-11T11:14:12Z",
+      "head": "fix/chat-message-copy",
+      "headSha": "33a07c9d7b2e9e799b6eeb55deed5a85266ac0bd",
+      "base": "dev",
+      "updatedAt": "2026-10-11T11:14:14Z"
+    },
+    {
+      "number": 213,
+      "title": "Add split-view workspaces and DOCX autosave among others",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/213",
+      "state": "closed",
+      "mergedAt": "2026-10-11T10:45:24Z",
+      "head": "feat/split-view-autosave",
+      "headSha": "da42806807ab69117b204220af30c11611742b42",
+      "base": "dev",
+      "updatedAt": "2026-10-11T10:45:24Z"
+    },
+    {
+      "number": 109,
+      "title": "Add one-click experimental Apple PCC provider",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/109",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "feat/apple-fm-provider",
+      "headSha": "6f1158344da6a90bf8617114e0c674044ab43c33",
+      "base": "dev",
+      "updatedAt": "2026-10-11T09:58:58Z"
+    },
+    {
+      "number": 239,
+      "title": "Fix crash on blocked app-window navigation",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/239",
+      "state": "closed",
+      "mergedAt": "2026-10-11T09:30:02Z",
+      "head": "fix/blocked-navigation-crash",
+      "headSha": "61c79c7e5234156e7d6503564bb8f0a97ee848c3",
+      "base": "dev",
+      "updatedAt": "2026-10-11T09:30:03Z"
+    },
+    {
+      "number": 235,
+      "title": "Surface subagent permission requests in parent chats",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/235",
+      "state": "closed",
+      "mergedAt": "2026-10-09T21:00:41Z",
+      "head": "fix/subagent-permission-prompts",
+      "headSha": "a1d079e6abbef2106413da9041da9388875da245",
+      "base": "dev",
+      "updatedAt": "2026-10-09T21:00:43Z"
+    },
+    {
+      "number": 233,
+      "title": "Set up SignPath Windows signing and isolated onboarding builds",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/233",
+      "state": "closed",
+      "mergedAt": "2026-10-09T17:11:59Z",
+      "head": "codex/legalwork-signpath",
+      "headSha": "6b3bd2b289541cee31cd34d67e8b53d14ad688b4",
+      "base": "dev",
+      "updatedAt": "2026-10-09T17:12:01Z"
+    },
+    {
+      "number": 209,
+      "title": "Follow the firm: policies, its AI providers and its Knowledge Hub",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/209",
+      "state": "closed",
+      "mergedAt": "2026-10-09T11:21:38Z",
+      "head": "claude/org-admin-permissions-settings-500e9e",
+      "headSha": "0faf76951bbacf1e0e4da272cb07b3bc34724642",
+      "base": "dev",
+      "updatedAt": "2026-10-09T11:21:41Z"
+    },
+    {
+      "number": 230,
+      "title": "Fix missing Eigenwelt catalog models on alpha startup",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/230",
+      "state": "closed",
+      "mergedAt": "2026-10-09T09:26:02Z",
+      "head": "codex/fix-model-catalog-startup",
+      "headSha": "0246c6ab579cc17e3d9f7257f5e0b9be5a298e19",
+      "base": "dev",
+      "updatedAt": "2026-10-09T09:26:03Z"
+    },
+    {
+      "number": 228,
+      "title": "Capture safe automatic errors and share full diagnostics on demand",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/228",
+      "state": "open",
+      "mergedAt": null,
+      "head": "codex/privacy-first-errors",
+      "headSha": "a284d974303b65aa93470ca0094526903ade8878",
+      "base": "dev",
+      "updatedAt": "2026-10-09T08:19:14Z"
+    },
+    {
+      "number": 225,
+      "title": "Add PR review environments and desktop testing",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/225",
+      "state": "open",
+      "mergedAt": null,
+      "head": "feat/test-lab",
+      "headSha": "223064c21e15dc90b4038c07fd077031d60c6b82",
+      "base": "dev",
+      "updatedAt": "2026-10-08T14:32:01Z"
+    },
+    {
+      "number": 226,
+      "title": "Fix Windows frame color and unify title bar controls",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/226",
+      "state": "closed",
+      "mergedAt": "2026-10-07T16:52:32Z",
+      "head": "fix/windows-unified-navbar",
+      "headSha": "64ee0fc7fbf6e14c7e6aef99d30190713eb52f6e",
+      "base": "dev",
+      "updatedAt": "2026-10-07T16:52:34Z"
+    },
+    {
+      "number": 222,
+      "title": "Use catalog reasoning choices and preselect native defaults",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/222",
+      "state": "closed",
+      "mergedAt": "2026-10-07T15:58:05Z",
+      "head": "codex/model-reasoning-capabilities",
+      "headSha": "e3b9cf01c707238284de9652acca38d9aeffe68b",
+      "base": "dev",
+      "updatedAt": "2026-10-07T15:58:08Z"
+    },
+    {
+      "number": 220,
+      "title": "Keep the system prompt stable so prompt caching works",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/220",
+      "state": "closed",
+      "mergedAt": "2026-10-07T11:14:01Z",
+      "head": "fix/stable-system-prompt",
+      "headSha": "2cc2a47136611384745e168b43ea999d6913dc66",
+      "base": "dev",
+      "updatedAt": "2026-10-07T11:14:05Z"
+    },
+    {
+      "number": 210,
+      "title": "Save browser downloads in projects and reduce automation round trips",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/210",
+      "state": "closed",
+      "mergedAt": "2026-10-07T10:48:54Z",
+      "head": "fix/browser-project-downloads",
+      "headSha": "21f0caf19f037ff32d95c3824c7bdad871760126",
+      "base": "dev",
+      "updatedAt": "2026-10-07T10:48:56Z"
+    },
+    {
+      "number": 221,
+      "title": "Fix Windows startup and performance, add native ARM64 installers",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/221",
+      "state": "closed",
+      "mergedAt": "2026-10-07T10:15:29Z",
+      "head": "fix/windows-engine-performance",
+      "headSha": "5b5cb0f5e3e5e5b66700d494252538c692933ced",
+      "base": "dev",
+      "updatedAt": "2026-10-07T10:15:31Z"
+    },
+    {
+      "number": 217,
+      "title": "Add local scheduled tasks with project access controls",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/217",
+      "state": "closed",
+      "mergedAt": "2026-10-07T10:07:22Z",
+      "head": "feat/local-scheduled-tasks",
+      "headSha": "ca7a25bac3f5cd543ea4dc60be8564fd66523fcd",
+      "base": "dev",
+      "updatedAt": "2026-10-07T10:07:24Z"
+    },
+    {
+      "number": 223,
+      "title": "Use Eigenwelt model catalog updates with a Privacy opt-out",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/223",
+      "state": "closed",
+      "mergedAt": "2026-10-07T08:14:17Z",
+      "head": "codex/private-model-catalog",
+      "headSha": "cd1b0f2ebf8ab7428aa09b737545b1b647391b1d",
+      "base": "dev",
+      "updatedAt": "2026-10-07T08:14:18Z"
+    },
+    {
+      "number": 224,
+      "title": "Keep chat recency unchanged when opening conversations",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/224",
+      "state": "closed",
+      "mergedAt": "2026-10-07T08:05:15Z",
+      "head": "codex/chat-recency",
+      "headSha": "a81dd034c288dbaedf53c52a3c0e13c4f18aaf4a",
+      "base": "dev",
+      "updatedAt": "2026-10-07T08:05:18Z"
+    },
+    {
+      "number": 214,
+      "title": "Add Dark and Blackout modes across the workspace",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/214",
+      "state": "closed",
+      "mergedAt": "2026-10-06T12:38:37Z",
+      "head": "feat/dark-mode-2.0",
+      "headSha": "4cd35e94002b43928dcb67b3c774e2b21250ab10",
+      "base": "dev",
+      "updatedAt": "2026-10-06T12:38:37Z"
+    },
+    {
+      "number": 219,
+      "title": "Keep the first Home message visible through chat startup",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/219",
+      "state": "closed",
+      "mergedAt": "2026-10-06T12:20:26Z",
+      "head": "fix/home-chat-handoff",
+      "headSha": "b01f0d0d609ba37ca673b0744c9935e52fccc2b0",
+      "base": "dev",
+      "updatedAt": "2026-10-06T12:20:28Z"
+    },
+    {
+      "number": 216,
+      "title": "EIG-244: Confirm plans in LegalWork before browser checkout",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/216",
+      "state": "closed",
+      "mergedAt": "2026-10-06T12:06:50Z",
+      "head": "codex/eig-244-legalwork-confirmation",
+      "headSha": "70e448e1c5d22578f2c8c8ae3a89953cdd1faa31",
+      "base": "dev",
+      "updatedAt": "2026-10-06T12:06:52Z"
+    },
+    {
+      "number": 218,
+      "title": "Add Memory Drive drag-and-drop copying with live progress",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/218",
+      "state": "closed",
+      "mergedAt": "2026-10-06T11:57:29Z",
+      "head": "feat/memory-drive-drag-drop",
+      "headSha": "a65e19631cfee48c4f18f9eadf7ca4f452b75a61",
+      "base": "dev",
+      "updatedAt": "2026-10-06T11:57:30Z"
+    },
+    {
+      "number": 215,
+      "title": "Fix home file drops and the first-message transition",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/215",
+      "state": "closed",
+      "mergedAt": "2026-10-06T09:31:08Z",
+      "head": "fix/home-composer-drop-and-send",
+      "headSha": "b3fdb14204d147a00dff28401e9204ad18b559cb",
+      "base": "dev",
+      "updatedAt": "2026-10-06T09:31:09Z"
+    },
+    {
+      "number": 212,
+      "title": "Fix empty calendar exports and revision timestamps",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/212",
+      "state": "closed",
+      "mergedAt": "2026-10-06T06:46:31Z",
+      "head": "fix/calendar-feed-conformance",
+      "headSha": "f7d3e6549cfa1865aeebb3c68b091d3cdec49f33",
+      "base": "dev",
+      "updatedAt": "2026-10-06T06:46:33Z"
+    },
+    {
+      "number": 211,
+      "title": "Hide ChatGPT subscription connection on the Free plan",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/211",
+      "state": "closed",
+      "mergedAt": "2026-10-05T14:08:21Z",
+      "head": "fix/hide-chatgpt-free-plan",
+      "headSha": "1c30e45088503c5e9f258ea483d2e70e8ca8ad15",
+      "base": "dev",
+      "updatedAt": "2026-10-05T14:08:22Z"
+    },
+    {
+      "number": 197,
+      "title": "Add project calendars, inspectable deadline calculations and skill corrections",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/197",
+      "state": "closed",
+      "mergedAt": "2026-10-05T14:03:30Z",
+      "head": "feat/project-calendars-deadline-skills",
+      "headSha": "e1e1727dbb50603151f3f7135a8abdffa7b2cc7c",
+      "base": "dev",
+      "updatedAt": "2026-10-05T14:03:32Z"
+    },
+    {
+      "number": 208,
+      "title": "Fix missing models by using OpenCode's default catalogue",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/208",
+      "state": "closed",
+      "mergedAt": "2026-10-05T11:13:30Z",
+      "head": "fix/opencode-model-catalog",
+      "headSha": "1cd87a34e6ed9881fee586b5a8edf70332dc9a31",
+      "base": "dev",
+      "updatedAt": "2026-10-05T11:13:32Z"
+    },
+    {
+      "number": 207,
+      "title": "Fix Sync sign-in and native invoice upgrade recovery",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/207",
+      "state": "closed",
+      "mergedAt": "2026-10-05T11:08:28Z",
+      "head": "fix/alpha-billing-recovery",
+      "headSha": "4a17eed6600542e8090fcc3243e7fbb382cc6ac3",
+      "base": "dev",
+      "updatedAt": "2026-10-05T11:08:31Z"
+    },
+    {
+      "number": 206,
+      "title": "Add Sync onboarding and focused in-chat usage recovery",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/206",
+      "state": "closed",
+      "mergedAt": "2026-10-04T19:50:33Z",
+      "head": "feat/user-budgets",
+      "headSha": "adbceb68abd98874faab62bb32e2467bff13c757",
+      "base": "dev",
+      "updatedAt": "2026-10-04T19:50:36Z"
+    },
+    {
+      "number": 205,
+      "title": "Add project personalization, refresh provider models, and remove the local memory plugin",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/205",
+      "state": "closed",
+      "mergedAt": "2026-10-04T18:43:59Z",
+      "head": "consolidate/personalization-providers-memory",
+      "headSha": "2a997f7060d045ae0f94aace970c1d555d51d529",
+      "base": "dev",
+      "updatedAt": "2026-10-04T18:44:02Z"
+    },
+    {
+      "number": 204,
+      "title": "Remove the local memory plugin",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/204",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "fix/remove-local-memory-plugin",
+      "headSha": "79dcc5d1947825fd5b1ea34b328aab6e7638b0d9",
+      "base": "dev",
+      "updatedAt": "2026-10-04T18:12:19Z"
+    },
+    {
+      "number": 203,
+      "title": "Refresh provider models while preserving custom selections",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/203",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/custom-provider-refresh",
+      "headSha": "d36675d67c906fbce4e01ec31fffa0b70bee5f24",
+      "base": "dev",
+      "updatedAt": "2026-10-04T18:12:16Z"
+    },
+    {
+      "number": 198,
+      "title": "Add per-project personalization with approved agent updates",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/198",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/project-personalization",
+      "headSha": "6c164fd7b5f663fb2dcc4ebbdbd059b93035cbfd",
+      "base": "dev",
+      "updatedAt": "2026-10-04T18:12:14Z"
+    },
+    {
+      "number": 202,
+      "title": "Use the LegalWork flower for Eigenwelt provider icons",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/202",
+      "state": "closed",
+      "mergedAt": "2026-10-02T06:56:49Z",
+      "head": "fix/eigenwelt-provider-flower",
+      "headSha": "2290460f86d07b5a577928ed445f78dd4f8bd7f5",
+      "base": "dev",
+      "updatedAt": "2026-10-02T06:56:51Z"
+    },
+    {
+      "number": 201,
+      "title": "Fit Home to smaller windows and reduce input height",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/201",
+      "state": "closed",
+      "mergedAt": "2026-10-01T17:31:33Z",
+      "head": "fix/home-compact-layout",
+      "headSha": "8d6cde62d466581163a7eb5d500204bf1f47ed47",
+      "base": "dev",
+      "updatedAt": "2026-10-01T17:31:34Z"
+    },
+    {
+      "number": 200,
+      "title": "Bundle a general Due Diligence workflow with an attached Word template",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/200",
+      "state": "closed",
+      "mergedAt": "2026-10-01T13:24:29Z",
+      "head": "codex/general-dd-workflow",
+      "headSha": "fd362dc1c631863630422142412e3d2c34b5fea9",
+      "base": "dev",
+      "updatedAt": "2026-10-01T13:24:31Z"
+    },
+    {
+      "number": 199,
+      "title": "Add Home and integrate paste, startup update, and account fixes",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/199",
+      "state": "closed",
+      "mergedAt": "2026-10-01T10:14:04Z",
+      "head": "feat/app-home-composer",
+      "headSha": "95e168d012cd250b01c7cb5308801d4b6cc42724",
+      "base": "dev",
+      "updatedAt": "2026-10-01T10:35:15Z"
+    },
+    {
+      "number": 196,
+      "title": "Keep Eigenwelt accounts connected through interrupted refreshes",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/196",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/eigenwelt-auth-audit",
+      "headSha": "42e956af4f3d9a7279254a04b77c5625ae0d56d7",
+      "base": "dev",
+      "updatedAt": "2026-10-01T10:14:10Z"
+    },
+    {
+      "number": 195,
+      "title": "Allow updates from the startup error screen",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/195",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "fix/startup-error-updates",
+      "headSha": "043a96ba480c908f0452795e2bd1b28e1d75ae0a",
+      "base": "dev",
+      "updatedAt": "2026-10-01T10:14:08Z"
+    },
+    {
+      "number": 194,
+      "title": "EIG-201 Improve paste badges and add a minimal text preview",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/194",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/chat-paste-behavior",
+      "headSha": "7325ad674921ebb99829a609ea57ed554a871dca",
+      "base": "dev",
+      "updatedAt": "2026-10-01T10:14:07Z"
+    },
+    {
+      "number": 193,
+      "title": "Automate SaaS due diligence and harden long-running reviews",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/193",
+      "state": "closed",
+      "mergedAt": "2026-10-01T10:01:37Z",
+      "head": "codex/saas-dd-demo",
+      "headSha": "8eb27e14c71e33ded363cfd1b6c35b41a25e3b20",
+      "base": "dev",
+      "updatedAt": "2026-10-01T10:01:40Z"
+    },
+    {
+      "number": 191,
+      "title": "Offer the quality OCR model on 64-bit Windows with llama.cpp's Vulkan build",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/191",
+      "state": "open",
+      "mergedAt": null,
+      "head": "feat/quality-ocr-windows-vulkan",
+      "headSha": "43ff903119ab8ac93f082d57958e344121456f40",
+      "base": "dev",
+      "updatedAt": "2026-09-30T17:13:49Z"
+    },
+    {
+      "number": 192,
+      "title": "Keep sidebar actions fixed and soften chat typography",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/192",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "fix/sidebar-fixed-actions",
+      "headSha": "41d6922bdc4924ea5e6ad865ca597707a3e44713",
+      "base": "dev",
+      "updatedAt": "2026-09-30T09:54:56Z"
+    },
+    {
+      "number": 185,
+      "title": "Add project workspaces, remote folder links, search and Tabular Review",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/185",
+      "state": "closed",
+      "mergedAt": "2026-09-29T11:12:34Z",
+      "head": "codex/projects-akte-workspace",
+      "headSha": "1ce8a73d6ca1c6c22e9662e7c7b257fe4dfa85aa",
+      "base": "dev",
+      "updatedAt": "2026-09-29T11:12:38Z"
+    },
+    {
+      "number": 190,
+      "title": "Run the quality OCR model through llama.cpp with Paddle's block pipeline",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/190",
+      "state": "closed",
+      "mergedAt": "2026-09-28T22:35:03Z",
+      "head": "fix/quality-ocr-jev-gate",
+      "headSha": "b23efe884e3b3b587a853a15553841b4d495a8cd",
+      "base": "codex/projects-akte-workspace",
+      "updatedAt": "2026-09-28T22:35:06Z"
+    },
+    {
+      "number": 189,
+      "title": "Create projects in a centered onboarding flow",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/189",
+      "state": "closed",
+      "mergedAt": "2026-09-28T22:30:16Z",
+      "head": "codex/project-onboarding",
+      "headSha": "5eb2669dcb23b1ed606bbe68f10b55771421162c",
+      "base": "codex/projects-akte-workspace",
+      "updatedAt": "2026-09-28T22:30:18Z"
+    },
+    {
+      "number": 186,
+      "title": "Bundle local OCR and add document layout to Tabular Review",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/186",
+      "state": "closed",
+      "mergedAt": "2026-09-27T21:56:34Z",
+      "head": "codex/ocr-auto-download",
+      "headSha": "d30ad8002ccead06990fff84cfd3b89197d4db64",
+      "base": "codex/projects-akte-workspace",
+      "updatedAt": "2026-09-27T21:56:35Z"
+    },
+    {
+      "number": 188,
+      "title": "Sync projects (Akten) with the firm through Eigenwelt",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/188",
+      "state": "closed",
+      "mergedAt": "2026-09-27T20:33:59Z",
+      "head": "claude/project-syncing-architecture-41ab37",
+      "headSha": "9b9b2ee5a42ca3ef842f073b33467dae697db373",
+      "base": "codex/projects-akte-workspace",
+      "updatedAt": "2026-09-27T20:34:01Z"
+    },
+    {
+      "number": 187,
+      "title": "Refine agent judgment, source honesty, and working style",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/187",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "codex/legalwork-prompt-character",
+      "headSha": "8f586e8f8f514d0c0ffe65e243dcc7d29e826e69",
+      "base": "dev",
+      "updatedAt": "2026-09-26T16:00:00Z"
+    },
+    {
+      "number": 137,
+      "title": "Add Dropbox file storage",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/137",
+      "state": "closed",
+      "mergedAt": "2026-09-25T12:13:36Z",
+      "head": "feat/storage-oauth-dropbox",
+      "headSha": "7ccb32e026d7fa53ea5fa5137b2cc3f20553bbb5",
+      "base": "dev",
+      "updatedAt": "2026-09-25T12:13:38Z"
+    },
+    {
+      "number": 184,
+      "title": "Improve skill compatibility and skipped-skill alerts",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/184",
+      "state": "closed",
+      "mergedAt": "2026-09-24T13:01:37Z",
+      "head": "fix/skill-folder-name-mismatch",
+      "headSha": "d7d72a4e010305eafe95be0bd0cf5b0c9ef73bbc",
+      "base": "dev",
+      "updatedAt": "2026-09-24T13:01:38Z"
+    },
+    {
+      "number": 180,
+      "title": "Unify Windows OpenCode config and migrate workflows",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/180",
+      "state": "closed",
+      "mergedAt": "2026-09-24T11:41:24Z",
+      "head": "fix/windows-workflow-skill-loading",
+      "headSha": "df3a6df4c532afc46bd02178ba8d15cb9362b4cf",
+      "base": "dev",
+      "updatedAt": "2026-09-24T11:41:26Z"
+    },
+    {
+      "number": 183,
+      "title": "Handle malformed skill frontmatter without breaking workflows",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/183",
+      "state": "closed",
+      "mergedAt": "2026-09-24T10:02:13Z",
+      "head": "fix/skill-parse-on-dev",
+      "headSha": "89dae2fca0890a8f231bc8076220c29a3740dece",
+      "base": "dev",
+      "updatedAt": "2026-09-24T10:02:15Z"
+    },
+    {
+      "number": 181,
+      "title": "Hide macOS-only Computer Use card on Windows",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/181",
+      "state": "closed",
+      "mergedAt": "2026-09-24T09:57:19Z",
+      "head": "fix/hide-computer-use-on-windows",
+      "headSha": "3ae803d4caeee2450cbb90d3499dcf819222db6c",
+      "base": "dev",
+      "updatedAt": "2026-09-24T09:57:20Z"
+    },
+    {
+      "number": 182,
+      "title": "Fix OpenCode startup readiness and unavailable errors",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/182",
+      "state": "closed",
+      "mergedAt": "2026-09-24T09:54:37Z",
+      "head": "fix/opencode-startup-readiness",
+      "headSha": "543e242eae3fb901cbe3bda001ffe85b6865596e",
+      "base": "dev",
+      "updatedAt": "2026-09-24T09:54:39Z"
+    },
+    {
+      "number": 179,
+      "title": "Fix Linux AppImage executable name",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/179",
+      "state": "closed",
+      "mergedAt": "2026-09-23T19:43:45Z",
+      "head": "fix/linux-appimage-executable",
+      "headSha": "e3da18911b3c5f814e476368d51a5e0bd32503ed",
+      "base": "dev",
+      "updatedAt": "2026-09-23T19:43:47Z"
+    },
+    {
+      "number": 178,
+      "title": "Use Ubuntu 24.04 for Linux release builds",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/178",
+      "state": "closed",
+      "mergedAt": "2026-09-23T19:11:09Z",
+      "head": "fix/linux-release-runner",
+      "headSha": "d0d2fd8607d53e3e8c9eed8e057f42c65b88025b",
+      "base": "dev",
+      "updatedAt": "2026-09-23T19:11:11Z"
+    },
+    {
+      "number": 177,
+      "title": "Repair existing workflows on desktop startup",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/177",
+      "state": "closed",
+      "mergedAt": "2026-09-23T19:07:20Z",
+      "head": "fix/installed-workflow-migration",
+      "headSha": "3e8aeaad3d093d3867bbb35ea442e43dadc1c9f4",
+      "base": "dev",
+      "updatedAt": "2026-09-23T19:07:22Z"
+    },
+    {
+      "number": 176,
+      "title": "Fix imported workflows missing loadable skill frontmatter",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/176",
+      "state": "closed",
+      "mergedAt": "2026-09-23T18:17:33Z",
+      "head": "fix/imported-workflow-frontmatter",
+      "headSha": "640014399337044d22d0c3505b02751b47d4a254",
+      "base": "dev",
+      "updatedAt": "2026-09-23T18:17:34Z"
+    },
+    {
+      "number": 175,
+      "title": "Hold analytics until onboarding choice is committed",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/175",
+      "state": "closed",
+      "mergedAt": "2026-09-23T17:59:53Z",
+      "head": "claude/analytics-flush-onboarding-toggle-8ac432",
+      "headSha": "8c91ea61391d3047445b0ae649e092b778a02d24",
+      "base": "dev",
+      "updatedAt": "2026-09-23T17:59:54Z"
+    },
+    {
+      "number": 130,
+      "title": "Add a local mail client with encrypted storage and provider sync",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/130",
+      "state": "open",
+      "mergedAt": null,
+      "head": "feat/local-mail-client",
+      "headSha": "64d75f95965e11a98feef2e9ba0598fa481b0245",
+      "base": "dev",
+      "updatedAt": "2026-09-23T15:07:32Z"
+    },
+    {
+      "number": 165,
+      "title": "Redesign workflows and edit attachments in the sidebar",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/165",
+      "state": "closed",
+      "mergedAt": "2026-09-23T13:43:39Z",
+      "head": "feat/workflow-library-editors",
+      "headSha": "4a4f9530e7360b54daa0254233eb7072e9d4a083",
+      "base": "dev",
+      "updatedAt": "2026-09-23T13:43:40Z"
+    },
+    {
+      "number": 169,
+      "title": "Keep main-process errors for support and collect logs from Settings",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/169",
+      "state": "closed",
+      "mergedAt": "2026-09-23T13:37:48Z",
+      "head": "johann/eig-200-support-logs",
+      "headSha": "026db411ac2581692269ada26f245c93506e674c",
+      "base": "dev",
+      "updatedAt": "2026-09-23T13:37:50Z"
+    },
+    {
+      "number": 168,
+      "title": "Fix provider setup in the Word add-in pane",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/168",
+      "state": "closed",
+      "mergedAt": "2026-09-23T13:28:25Z",
+      "head": "claude/word-plugin-provider-connect-e470e9",
+      "headSha": "5c0a1b547ee1bcb5cee96c3ef08b2910d8340598",
+      "base": "dev",
+      "updatedAt": "2026-09-23T13:28:26Z"
+    },
+    {
+      "number": 167,
+      "title": "fix(skills): import frontmatter-less and long-named GitHub skills, show failure reasons",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/167",
+      "state": "closed",
+      "mergedAt": "2026-09-23T13:19:10Z",
+      "head": "fix/github-skill-import",
+      "headSha": "5aaaf6a0b19709d30c0ff1c408203d8cd7e4be8f",
+      "base": "dev",
+      "updatedAt": "2026-09-23T13:19:12Z"
+    },
+    {
+      "number": 166,
+      "title": "Fix run token accounting and make run failures diagnosable",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/166",
+      "state": "closed",
+      "mergedAt": "2026-09-23T13:11:27Z",
+      "head": "fix/run-token-accounting",
+      "headSha": "51a16840e1db17f1ca234f2fdc39edceb75dc6bb",
+      "base": "dev",
+      "updatedAt": "2026-09-23T13:11:29Z"
+    },
+    {
+      "number": 164,
+      "title": "Stop the app making third-party requests for fonts and icons",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/164",
+      "state": "closed",
+      "mergedAt": "2026-09-23T13:07:25Z",
+      "head": "claude/intelligent-heisenberg-bx6lqy",
+      "headSha": "bc95b278bd6d4291878702650b31475c10fa602c",
+      "base": "dev",
+      "updatedAt": "2026-09-23T13:07:28Z"
+    },
+    {
+      "number": 163,
+      "title": "Fix global skill loading and editing on Windows",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/163",
+      "state": "closed",
+      "mergedAt": "2026-09-21T16:37:15Z",
+      "head": "fix/windows-global-skills",
+      "headSha": "2d87bcb85798e96715747ea5cac186d489022eb5",
+      "base": "dev",
+      "updatedAt": "2026-09-21T16:37:17Z"
+    },
+    {
+      "number": 162,
+      "title": "Hide scrollbars and align pane headers",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/162",
+      "state": "closed",
+      "mergedAt": "2026-09-21T13:14:08Z",
+      "head": "fix/hide-app-scrollbars",
+      "headSha": "166b2076dd1aa3b55eafa46b16bac968bd3489e4",
+      "base": "dev",
+      "updatedAt": "2026-09-21T13:14:11Z"
+    },
+    {
+      "number": 161,
+      "title": "Fix browser page disappearing when sending messages",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/161",
+      "state": "closed",
+      "mergedAt": "2026-09-21T12:05:31Z",
+      "head": "fix/browser-panel-message-visibility",
+      "headSha": "2d1c9fba05170397b3b1d746be12bd080219c133",
+      "base": "dev",
+      "updatedAt": "2026-09-21T12:05:33Z"
+    },
+    {
+      "number": 160,
+      "title": "Fix desktop browser, approvals, model setup, and release checksums",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/160",
+      "state": "closed",
+      "mergedAt": "2026-09-21T10:45:24Z",
+      "head": "fix/desktop-browser-and-provider-issues",
+      "headSha": "5f67dabdc962111691bb195e11e384fb186619f1",
+      "base": "dev",
+      "updatedAt": "2026-09-21T10:45:27Z"
+    },
+    {
+      "number": 159,
+      "title": "Tasks: persistent multi-select filters",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/159",
+      "state": "closed",
+      "mergedAt": "2026-09-18T16:49:25Z",
+      "head": "codex/task-filter-multiselect",
+      "headSha": "ac98096de01b20f6dd8b495fce755dee803cc28d",
+      "base": "dev",
+      "updatedAt": "2026-09-18T16:49:26Z"
+    },
+    {
+      "number": 158,
+      "title": "Add dedicated LegalQuants workflow importer",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/158",
+      "state": "closed",
+      "mergedAt": "2026-09-18T08:07:38Z",
+      "head": "codex/legalquants-workflow-import",
+      "headSha": "153cbeb0614a2c95175e3248a91db1176c17558b",
+      "base": "dev",
+      "updatedAt": "2026-09-18T08:07:39Z"
+    },
+    {
+      "number": 157,
+      "title": "Add task context actions and storage drag and drop",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/157",
+      "state": "closed",
+      "mergedAt": "2026-09-17T09:35:42Z",
+      "head": "feat/task-list-context-menu",
+      "headSha": "6c7e68cac85b11376dbfb7f41be1be5a019c9dc4",
+      "base": "dev",
+      "updatedAt": "2026-09-17T09:35:44Z"
+    },
+    {
+      "number": 155,
+      "title": "Plan screen over the app while no model works: own model, Plus, Pro",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/155",
+      "state": "closed",
+      "mergedAt": "2026-09-17T08:27:43Z",
+      "head": "feat/ai-plans-overlay",
+      "headSha": "54899d3ff86b9c0653b83f7f1b222260b70fb9ea",
+      "base": "dev",
+      "updatedAt": "2026-09-17T08:27:44Z"
+    },
+    {
+      "number": 156,
+      "title": "fix(desktop): stop the plugin bundle check from reading the string \"from\" as an import",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/156",
+      "state": "closed",
+      "mergedAt": "2026-09-16T23:22:30Z",
+      "head": "fix/plugin-bundle-check-strings",
+      "headSha": "6295eb2d6e35f20b8b84a9b2538538817481c4a3",
+      "base": "dev",
+      "updatedAt": "2026-09-16T23:22:32Z"
+    },
+    {
+      "number": 154,
+      "title": "Add local-first task management and firm sync",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/154",
+      "state": "closed",
+      "mergedAt": "2026-09-16T22:36:53Z",
+      "head": "claude/memo-feature-proposals-075c4k",
+      "headSha": "f5db0eba9326df3ba7ebf9e2b3de31d8ff9a8cc4",
+      "base": "dev",
+      "updatedAt": "2026-09-16T22:36:55Z"
+    },
+    {
+      "number": 153,
+      "title": "fix(mcp): register the OAuth client when a custom connector is added with automatic sign-in",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/153",
+      "state": "closed",
+      "mergedAt": "2026-09-16T21:59:35Z",
+      "head": "fix/mcp-register-client-on-add",
+      "headSha": "6ff240515492829d3b4b2a081d9feb9fdb19d12c",
+      "base": "dev",
+      "updatedAt": "2026-09-16T21:59:37Z"
+    },
+    {
+      "number": 152,
+      "title": "fix(composer): lock sending while no AI provider is connected",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/152",
+      "state": "closed",
+      "mergedAt": "2026-09-16T21:55:39Z",
+      "head": "fix/lock-composer-when-no-provider",
+      "headSha": "8bb094fc84f0b919bce0ce79d1bfcefb8a867ddd",
+      "base": "dev",
+      "updatedAt": "2026-09-16T21:55:41Z"
+    },
+    {
+      "number": 151,
+      "title": "Fix file sidebars in separate session windows",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/151",
+      "state": "closed",
+      "mergedAt": "2026-09-14T18:01:52Z",
+      "head": "fix/detached-session-file-sidebars",
+      "headSha": "08d8b37b1debfa048d4042aaa936089b9f19d431",
+      "base": "dev",
+      "updatedAt": "2026-09-14T18:01:54Z"
+    },
+    {
+      "number": 149,
+      "title": "Add file actions and grouped tool activity",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/149",
+      "state": "closed",
+      "mergedAt": "2026-09-14T17:22:13Z",
+      "head": "fix/storage-rename-tools",
+      "headSha": "1623fbcb797221153abf94c38ffbad8a2c84548b",
+      "base": "dev",
+      "updatedAt": "2026-09-14T17:22:14Z"
+    },
+    {
+      "number": 150,
+      "title": "fix(eigenwelt): make a sign-in from one workspace available in every workspace right away",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/150",
+      "state": "closed",
+      "mergedAt": "2026-09-14T16:31:44Z",
+      "head": "fix/eigenwelt-all-workspaces",
+      "headSha": "57ecb8ff1e240507667fd90c7f8c473987a563e7",
+      "base": "dev",
+      "updatedAt": "2026-09-14T16:31:45Z"
+    },
+    {
+      "number": 143,
+      "title": "fix(engine): read model output limits and image/PDF support from their source, and stop scoring cut-off evals as 0%",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/143",
+      "state": "closed",
+      "mergedAt": "2026-09-14T15:44:44Z",
+      "head": "fix/eigenwelt-model-input-modalities",
+      "headSha": "27f21b81e6f1effc6ca42c688770235183a18312",
+      "base": "dev",
+      "updatedAt": "2026-09-14T15:44:45Z"
+    },
+    {
+      "number": 144,
+      "title": "fix(eigenwelt): keep the Eigenwelt models across workspace switches and engine reloads",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/144",
+      "state": "closed",
+      "mergedAt": "2026-09-14T15:41:46Z",
+      "head": "fix/eigenwelt-account-wide-connection",
+      "headSha": "00521ed6590b571804b88221a31b2f2934ce4a0c",
+      "base": "dev",
+      "updatedAt": "2026-09-14T15:41:49Z"
+    },
+    {
+      "number": 147,
+      "title": "Plan names: Plus (€29) and Pro (€69) in the upsell, onboarding and account copy",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/147",
+      "state": "closed",
+      "mergedAt": "2026-09-14T15:34:09Z",
+      "head": "chore/plan-names-plus-pro",
+      "headSha": "36936d994fba0540272ac2aed993d1db4e5e8487",
+      "base": "dev",
+      "updatedAt": "2026-09-14T15:34:11Z"
+    },
+    {
+      "number": 148,
+      "title": "Fix Memory Drive editing, refresh and team sharing",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/148",
+      "state": "closed",
+      "mergedAt": "2026-09-14T14:39:59Z",
+      "head": "fix/storage-local-editing",
+      "headSha": "78b7e2c6585af9021af78d83ffe2b2527cf9a74b",
+      "base": "dev",
+      "updatedAt": "2026-09-14T14:40:01Z"
+    },
+    {
+      "number": 145,
+      "title": "fix(engine): read model output limits from their source, and stop scoring cut-off evals as 0%",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/145",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "claude/model-output-limits",
+      "headSha": "3bb98cf72814330212f60ddc8f2fef24ed8eb5dc",
+      "base": "dev",
+      "updatedAt": "2026-09-14T13:59:23Z"
+    },
+    {
+      "number": 146,
+      "title": "Fix MCP disconnect with legacy workspace settings",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/146",
+      "state": "closed",
+      "mergedAt": "2026-09-14T13:49:20Z",
+      "head": "fix/legalmemory-disconnect-alpha",
+      "headSha": "b05b9136f7aedf4067b7aac904d7854adf733eb0",
+      "base": "dev",
+      "updatedAt": "2026-09-14T13:49:22Z"
+    },
+    {
+      "number": 142,
+      "title": "Add Box file storage",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/142",
+      "state": "closed",
+      "mergedAt": "2026-09-14T10:25:51Z",
+      "head": "feat/storage-oauth-box",
+      "headSha": "ce26c31168eca232a08297a2d4453c91cedf800c",
+      "base": "dev",
+      "updatedAt": "2026-09-14T10:25:52Z"
+    },
+    {
+      "number": 141,
+      "title": "fix(release): keep the alpha version valid semver when the commit sha is all digits",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/141",
+      "state": "closed",
+      "mergedAt": "2026-09-14T09:16:24Z",
+      "head": "claude/alpha-version-hash",
+      "headSha": "f5fe31931ddcdbd34c85b88c2d794a1c0256d06f",
+      "base": "dev",
+      "updatedAt": "2026-09-14T09:16:26Z"
+    },
+    {
+      "number": 131,
+      "title": "Add file storage integrations and team sync",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/131",
+      "state": "closed",
+      "mergedAt": "2026-09-14T08:59:43Z",
+      "head": "feat/file-storage-integrations",
+      "headSha": "08892969f9fb6d657a0ed9972e8f030576f9e110",
+      "base": "dev",
+      "updatedAt": "2026-09-14T08:59:47Z"
+    },
+    {
+      "number": 129,
+      "title": "feat(legalmemory): drag whole folders from the Memory Drive into the chat",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/129",
+      "state": "closed",
+      "mergedAt": "2026-09-14T08:43:46Z",
+      "head": "claude/drag-drop-folders-memory-7bce4e",
+      "headSha": "3496378bcc2c39691b46ed71c79d0e0ed272774b",
+      "base": "dev",
+      "updatedAt": "2026-09-14T08:43:48Z"
+    },
+    {
+      "number": 133,
+      "title": "fix(onboarding): never show What's new or the transcription intro to new users",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/133",
+      "state": "closed",
+      "mergedAt": "2026-09-14T08:37:58Z",
+      "head": "claude/post-onboarding-modals-514762",
+      "headSha": "a82ccec5b8e5e5da46c3c3dd7e12b4c753d269bd",
+      "base": "dev",
+      "updatedAt": "2026-09-14T08:37:59Z"
+    },
+    {
+      "number": 135,
+      "title": "fix(analytics): report the permissions step's completion",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/135",
+      "state": "closed",
+      "mergedAt": "2026-09-14T08:34:42Z",
+      "head": "claude/posthog-google-ads-events-5decuz",
+      "headSha": "be403ad2bf6c06a99fe8d0be413872a56a596754",
+      "base": "dev",
+      "updatedAt": "2026-09-14T08:34:44Z"
+    },
+    {
+      "number": 136,
+      "title": "fix(mcp): one shared connector store, no engine rebuild during sign-in, and a connector dialog that checks the server first",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/136",
+      "state": "closed",
+      "mergedAt": "2026-09-14T08:15:15Z",
+      "head": "claude/mcp-workspace-connections-f3cae1",
+      "headSha": "6f4d913ab40b1df556e15b990ca56e5d50811347",
+      "base": "dev",
+      "updatedAt": "2026-09-14T08:15:17Z"
+    },
+    {
+      "number": 140,
+      "title": "Add DCO contributor sign-offs and automatic PR check",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/140",
+      "state": "closed",
+      "mergedAt": "2026-09-14T07:55:53Z",
+      "head": "chore/contributor-ip",
+      "headSha": "ad2c491abc290ff1d2a85eec45fb4c17dbb14758",
+      "base": "dev",
+      "updatedAt": "2026-09-14T07:55:55Z"
+    },
+    {
+      "number": 134,
+      "title": "docs(terms): state that the Gemini models are zero data retention",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/134",
+      "state": "closed",
+      "mergedAt": "2026-09-11T15:10:53Z",
+      "head": "legal/gemini-zero-data-retention",
+      "headSha": "7a1e02d6246f6b56ff0522b8c30f9157aeaa1878",
+      "base": "dev",
+      "updatedAt": "2026-09-11T15:10:55Z"
+    },
+    {
+      "number": 132,
+      "title": "Sync firm storage connections into LegalWork",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/132",
+      "state": "closed",
+      "mergedAt": "2026-09-10T14:05:59Z",
+      "head": "feat/team-storage-sync",
+      "headSha": "7a35b35a38952df5c7aa11ed60dab377a1f209ff",
+      "base": "feat/file-storage-integrations",
+      "updatedAt": "2026-09-10T14:06:00Z"
+    },
+    {
+      "number": 128,
+      "title": "fix(desktop): package the bundled plugins, not the tsc output",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/128",
+      "state": "closed",
+      "mergedAt": "2026-09-09T10:05:47Z",
+      "head": "fix/plugin-bundle-outdir",
+      "headSha": "2e65fd497942d8cea3a91ebcab296fb315641c0c",
+      "base": "dev",
+      "updatedAt": "2026-09-09T10:05:50Z"
+    },
+    {
+      "number": 127,
+      "title": "feat: German UI, Evals with ablation arms, and reliable MCP OAuth",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/127",
+      "state": "closed",
+      "mergedAt": "2026-09-09T08:48:46Z",
+      "head": "claude/consolidate-open-prs",
+      "headSha": "c4b338e85ab1810e18781f6b26580eb477b5df13",
+      "base": "dev",
+      "updatedAt": "2026-09-09T08:48:49Z"
+    },
+    {
+      "number": 125,
+      "title": "feat(i18n): ship a complete, enforced German translation",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/125",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "claude/german-translation-language-system-3dcfa0",
+      "headSha": "3c4fd5a646ebb8e14e930f07c038e5db69976e54",
+      "base": "dev",
+      "updatedAt": "2026-09-09T08:23:24Z"
+    },
+    {
+      "number": 120,
+      "title": "Turn the Learning tab into Evals, fix Harvey import, and add ablation arms",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/120",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "claude/learning-tab-eval-rename-81f506",
+      "headSha": "05ccffac2b3e0f5efd25b74bed6c884a7beedee3",
+      "base": "dev",
+      "updatedAt": "2026-09-09T08:23:22Z"
+    },
+    {
+      "number": 121,
+      "title": "Fix MCP OAuth setup, browser callbacks, and connection status",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/121",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "fix/mcp-oauth-flow",
+      "headSha": "56bba4af6d3fc903fd5da0f4555f60b0baa37c8c",
+      "base": "dev",
+      "updatedAt": "2026-09-09T08:23:19Z"
+    },
+    {
+      "number": 124,
+      "title": "feat(onboarding): add a tool-permissions step, move the AI step last",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/124",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "claude/onboarding-settings-restructure-390c96",
+      "headSha": "b3aa323b217555468e162a41896cef69ca8ca2f1",
+      "base": "dev",
+      "updatedAt": "2026-09-09T08:23:17Z"
+    },
+    {
+      "number": 103,
+      "title": "feat(skills): let the assistant install skills and workflows the app lists",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/103",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "claude/agent-workflow-skill-creation-19nmgt",
+      "headSha": "33de5b01984cf3406252d8789ea7ee6b7c045609",
+      "base": "dev",
+      "updatedAt": "2026-09-09T08:23:15Z"
+    },
+    {
+      "number": 126,
+      "title": "fix(desktop): ship the app icons so the packaged dock icon follows dark mode",
+      "url": "https://github.com/eigenweltlabs/legalwork/pull/126",
+      "state": "closed",
+      "mergedAt": null,
+      "head": "fix/packaged-dark-dock-icon",
+      "headSha": "a363f63409679c5464059f97ff26c1f46ffd2c01",
+      "base": "dev",
+      "updatedAt": "2026-09-09T08:23:12Z"
+    }
+  ],
+  "branches": [
+    {
+      "name": "claude/agent-workflow-skill-creation-19nmgt",
+      "sha": "33de5b01984cf3406252d8789ea7ee6b7c045609"
+    },
+    {
+      "name": "claude/eigenwelt-model-api-provider",
+      "sha": "e9f57d505d8d87ee4d5cc3eaf9ef4e6a45a67ac0"
+    },
+    {
+      "name": "claude/german-translation-language-system-3dcfa0",
+      "sha": "3c4fd5a646ebb8e14e930f07c038e5db69976e54"
+    },
+    {
+      "name": "claude/learning-tab-eval-rename-81f506",
+      "sha": "05ccffac2b3e0f5efd25b74bed6c884a7beedee3"
+    },
+    {
+      "name": "claude/model-output-limits",
+      "sha": "3bb98cf72814330212f60ddc8f2fef24ed8eb5dc"
+    },
+    {
+      "name": "claude/notion-oauth-client-id-sh8p2p",
+      "sha": "48665ac0fd0ebd63873d42e854d653af1566dc3b"
+    },
+    {
+      "name": "claude/onboarding-settings-restructure-390c96",
+      "sha": "b3aa323b217555468e162a41896cef69ca8ca2f1"
+    },
+    {
+      "name": "claude/pensive-hypatia-zyk1b1",
+      "sha": "06d61669363f6b9f05fca0f6f748fff91197f291"
+    },
+    {
+      "name": "claude/synced-drives-workspace-error-cimgv4",
+      "sha": "1c95a43ab2c335ca398f8a0144764483d71249cc"
+    },
+    {
+      "name": "codex/account-windows-sidebar",
+      "sha": "a36be929f4a72574fe2e263c51c651d769e3b46c"
+    },
+    {
+      "name": "codex/actaport-mcp",
+      "sha": "76f3ff707574d4f052b35837be66c6a19e742b08"
+    },
+    {
+      "name": "codex/background-document-work",
+      "sha": "64297e6d581d6b226465be3d4c028a423e60a655"
+    },
+    {
+      "name": "codex/chat-paste-behavior",
+      "sha": "7325ad674921ebb99829a609ea57ed554a871dca"
+    },
+    {
+      "name": "codex/connector-manager",
+      "sha": "b2361215cde61a939837f10dfd0e77364ec72aa4"
+    },
+    {
+      "name": "codex/connector-runtime-investigation",
+      "sha": "fcf9605c404e5ecb16a500709c613504855fff21"
+    },
+    {
+      "name": "codex/custom-provider-refresh",
+      "sha": "d36675d67c906fbce4e01ec31fffa0b70bee5f24"
+    },
+    {
+      "name": "codex/docx-lawyer-workflow",
+      "sha": "73714f6446fc12be060f02cd71d63710b6697130"
+    },
+    {
+      "name": "codex/eigenwelt-auth-audit",
+      "sha": "42e956af4f3d9a7279254a04b77c5625ae0d56d7"
+    },
+    {
+      "name": "codex/email-calendar-drafts",
+      "sha": "ce61762854d0e3710a8571d846d90fba38f0b725"
+    },
+    {
+      "name": "codex/fix-mcp-network-recovery",
+      "sha": "b619576ffae4b05e4f78d115ef30ae8a7b50fff3"
+    },
+    {
+      "name": "codex/google-drive-shared-access",
+      "sha": "637f730ee9c0806b24132edc6ee229f6728e7be6"
+    },
+    {
+      "name": "codex/import-format-compatibility",
+      "sha": "60425808a597a670a8c68062b4d4682d98716333"
+    },
+    {
+      "name": "codex/johannes-assistant",
+      "sha": "553bf94aa6e8575b2324e04187e39b64845f68b2"
+    },
+    {
+      "name": "codex/legalwork-cloud-sync",
+      "sha": "aee752e8a34c147286fb1c2d4acee4488ff5eb4d"
+    },
+    {
+      "name": "codex/legalwork-prompt-character",
+      "sha": "8f586e8f8f514d0c0ffe65e243dcc7d29e826e69"
+    },
+    {
+      "name": "codex/markdown-wiki",
+      "sha": "1460206047d5c75418eb153c66627bcec5fdbf2e"
+    },
+    {
+      "name": "codex/native-calls",
+      "sha": "c7015eb055ec599cac1413736f6b7a8a07d0f28d"
+    },
+    {
+      "name": "codex/open-computer-use-integration",
+      "sha": "be39def483e59170097c660c02ee93115f0694ce"
+    },
+    {
+      "name": "codex/persist-skipped-skill-alerts",
+      "sha": "7f796f67d9ea4eebed66e01dd2d345a2380fc645"
+    },
+    {
+      "name": "codex/privacy-first-errors",
+      "sha": "a284d974303b65aa93470ca0094526903ade8878"
+    },
+    {
+      "name": "codex/project-personalization",
+      "sha": "6c164fd7b5f663fb2dcc4ebbdbd059b93035cbfd"
+    },
+    {
+      "name": "codex/recover-v028-macos-x64",
+      "sha": "12ed1e9091ac3b5915391b73a14e2bfec65a9f8b"
+    },
+    {
+      "name": "codex/recover-v0212-macos-x64",
+      "sha": "eac9b3639ddf956898d33d1761dd490ad636228b"
+    },
+    {
+      "name": "codex/recover-windows-alpha-46",
+      "sha": "55fab632ebaddffc6917d0b6a5ed76a182aeee09"
+    },
+    {
+      "name": "codex/wiki-chat-editor-fixes",
+      "sha": "83ae38d1e73a10734edad208d0be77dd3d655dad"
+    },
+    {
+      "name": "dev",
+      "sha": "bb77ce7ce2ef0a665ad3f0704a7994b32b54672d"
+    },
+    {
+      "name": "feat/apple-fm-provider",
+      "sha": "6f1158344da6a90bf8617114e0c674044ab43c33"
+    },
+    {
+      "name": "feat/chatgpt-claude-plugin-import",
+      "sha": "10e07075c10a5be7a6cde2276a4bedb771480151"
+    },
+    {
+      "name": "feat/detachable-chat-windows",
+      "sha": "25e800866bafac8b03969716bae729c6b6bcadaf"
+    },
+    {
+      "name": "feat/hub-plan",
+      "sha": "af1871025079c9818b0374cd64b349fb8f5ff106"
+    },
+    {
+      "name": "feat/local-mail-client",
+      "sha": "64d75f95965e11a98feef2e9ba0598fa481b0245"
+    },
+    {
+      "name": "feat/mail-eig-148",
+      "sha": "29d6ab9e960b57e048e7191e0330bb1580bcd7e1"
+    },
+    {
+      "name": "feat/mail-eig-159-20260923",
+      "sha": "dcd8a92406ceb36262a1c78fa12d5560797f3f9d"
+    },
+    {
+      "name": "feat/mail-eig-161-20260923",
+      "sha": "2a677f5c37b8579acde15ffec30fad62916044fc"
+    },
+    {
+      "name": "feat/mail-plugins",
+      "sha": "c3a6ffb91b089efdd2c48c4737239bc60470736d"
+    },
+    {
+      "name": "feat/org-model-toggles",
+      "sha": "2fc43eca4def8aa863c3443c0160a99b12c04c96"
+    },
+    {
+      "name": "feat/quality-ocr-windows-vulkan",
+      "sha": "43ff903119ab8ac93f082d57958e344121456f40"
+    },
+    {
+      "name": "feat/realtime-voice-document-workflows",
+      "sha": "1aff13815e3f2bbe45fadb7d7e3cd24c46a4633b"
+    },
+    {
+      "name": "feat/storage-oauth-google-drive",
+      "sha": "dd99928ddb07d72eb66e88bd06f0ec35fd6b79ba"
+    },
+    {
+      "name": "feat/storage-oauth-microsoft",
+      "sha": "bd93b2c0ab58ff3a56d3bf1fc23d8fb619568ea5"
+    },
+    {
+      "name": "feat/test-lab",
+      "sha": "223064c21e15dc90b4038c07fd077031d60c6b82"
+    },
+    {
+      "name": "feat/weekly-allowance",
+      "sha": "34e0d1f1cdec35ef0ac9c0f5d81229d9f008b439"
+    },
+    {
+      "name": "fix/connector-import-compatibility",
+      "sha": "99f630cc0bce683fe62f55371cb7b71cf84f81e4"
+    },
+    {
+      "name": "fix/macos-notary-network-retry",
+      "sha": "c4a05076dbdc4fa1278cd1bfc6064b6e43d96097"
+    },
+    {
+      "name": "fix/mcp-oauth-flow",
+      "sha": "56bba4af6d3fc903fd5da0f4555f60b0baa37c8c"
+    },
+    {
+      "name": "fix/packaged-dark-dock-icon",
+      "sha": "a363f63409679c5464059f97ff26c1f46ffd2c01"
+    },
+    {
+      "name": "fix/pricing-copy",
+      "sha": "20740b3ec48040db3307b31b54863270079709e7"
+    },
+    {
+      "name": "fix/recorder-plus-button",
+      "sha": "6bbc48795438faa9eb5d148cede581e39728b002"
+    },
+    {
+      "name": "fix/remove-centered-fullscreen-button",
+      "sha": "734e651d2f840fc8e4be53bb703124ec8b8fbcc6"
+    },
+    {
+      "name": "fix/remove-local-memory-plugin",
+      "sha": "79dcc5d1947825fd5b1ea34b328aab6e7638b0d9"
+    },
+    {
+      "name": "fix/request-budget-reason",
+      "sha": "104322f5db905d6e620783ba994fbcfffeb35494"
+    },
+    {
+      "name": "fix/sidebar-fixed-actions",
+      "sha": "41d6922bdc4924ea5e6ad865ca597707a3e44713"
+    },
+    {
+      "name": "fix/startup-error-updates",
+      "sha": "043a96ba480c908f0452795e2bd1b28e1d75ae0a"
+    },
+    {
+      "name": "fix/subagent-chat-list",
+      "sha": "0a618ef3410e1268ddee853dba6284d441a58d71"
+    },
+    {
+      "name": "fix/trial-limit-priority",
+      "sha": "5fcc0846f6257b4acc9104d06195be770f73216c"
+    },
+    {
+      "name": "qualify/mail-eig153-linux-focus-20260922",
+      "sha": "7d673244422cd0b7be5b870c65cf613a9ef30191"
+    },
+    {
+      "name": "qualify/mail-eig-126-windows-probe-20260922",
+      "sha": "8237bf282064890fe7e3c5900017f8d2f90ff6d9"
+    },
+    {
+      "name": "qualify/mail-eig-152-final",
+      "sha": "9a6f3482007bad1ff24850d8311f2556d2f39353"
+    },
+    {
+      "name": "qualify/mail-final-focused-20260922",
+      "sha": "99cf272e8957472c964c1b34750f4015f46f76fa"
+    },
+    {
+      "name": "qualify/mail-final-targets-20260922",
+      "sha": "08aa5f76ea46d1dd406f10e45ae79b61d2e09c5b"
+    },
+    {
+      "name": "qualify/mail-final-two-boundaries-20260922",
+      "sha": "b63a901ce8f0189a48cdf4c8038b79ec66742f75"
+    },
+    {
+      "name": "qualify/mail-macos-signed-20260922",
+      "sha": "7a024bfc7ab85ed3e91fd43450be987e41d68f58"
+    },
+    {
+      "name": "qualify/mail-macos-signed-startup-20260922",
+      "sha": "a747e5505640357524c646adf3b1beffd2f50ffc"
+    },
+    {
+      "name": "qualify/mail-macos-startup-diagnostic-20260922",
+      "sha": "2eedced2e81efd5dd47e91b8f988582901b02110"
+    },
+    {
+      "name": "qualify/mail-other-user-diagnostic-20260922",
+      "sha": "87fbc385c93aee7a90a703f9df3b11d74fc01c99"
+    },
+    {
+      "name": "qualify/mail-reference-20260922",
+      "sha": "2fd51584cc253e444a9509cf68fe4d46b54e5f4b"
+    },
+    {
+      "name": "qualify/mail-windows-http-final-20260922",
+      "sha": "b7d3ad47d457f1b55080555af372c194f4807ca1"
+    },
+    {
+      "name": "qualify/mail-windows-targeted-20260922",
+      "sha": "f908efc00102bd0815ac836864e3ede01e59a5c4"
+    },
+    {
+      "name": "release/october-2026-alpha",
+      "sha": "f13c2cf5da4fcd60dd7fa3e47a58356f5142dce1"
+    },
+    {
+      "name": "release/october-2026-python-ca",
+      "sha": "8e9a892f3d99c1adc1387c5643065caff07b6bcf"
+    },
+    {
+      "name": "test/prompt-cache-ci-probe",
+      "sha": "d60438d07d7ec2aaf4ab82f4037f78567567c577"
+    }
+  ]
+}
